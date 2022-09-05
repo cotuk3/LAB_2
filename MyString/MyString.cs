@@ -4,12 +4,21 @@ namespace My_String
 {
     public class MyString
     {
+        char[] value;
+
         public MyString(string value)
         {
-            Value = value;
+            this.value = value.ToCharArray();
         }
 
-        public string Value { get; private set; }
+        public string Value
+        {
+            get { return new string(value); }
+            private set
+            {
+                this.value = value.ToCharArray();
+            }
+        }
         public int Length
         {
             get
@@ -20,9 +29,28 @@ namespace My_String
 
         public bool IsSubString(string subString)
         {
+            if (subString != null && subString.Length <= Value.Length)
+            {
+                int rows = Value.Length;
+                int columns = subString.Length;
 
+                int[,] lcs = new int[rows + 1, columns + 1];
 
-            return false;
+                for (int i = 1; i <= rows; i++)
+                {
+                    for (int j = 1; j <= columns; j++)
+                    {
+                        if (Value[i - 1].Equals(subString[j - 1]))
+                            lcs[i, j] = lcs[i - 1, j - 1] + 1;
+                        else
+                            lcs[i, j] = Math.Max(lcs[i, j - 1], lcs[i - 1, j]);
+                    }
+                }
+
+                if (subString.Length == lcs[rows, columns])
+                    return true;
+            }
+                return false;
         }
 
         public void InsertSubString(string subString, int index)

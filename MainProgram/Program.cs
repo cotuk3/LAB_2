@@ -14,9 +14,13 @@ namespace MainProgram
             MyString my = new MyString("Hello");
             Console.WriteLine(my);
 
-            my.InsertSubString("aaa", 2);
+            Console.WriteLine(my.IsSubString("aaa"));
+
+            my.InsertSubString("aaa", 2);     
 
             Console.WriteLine(my);
+
+            Console.WriteLine(my.IsSubString("llo"));
 
             Console.Read();
         }
