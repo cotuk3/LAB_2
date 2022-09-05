@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace My_String
 {
-    public class MyString
+    public class MyString // +
     {
         char[] value;
 
