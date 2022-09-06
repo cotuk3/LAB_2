@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace My_String
 {
-    public class MyString // +
+    public class MyString : IComparable<MyString> // +
     {
         char[] value;
 
@@ -113,5 +113,9 @@ namespace My_String
             return Value;
         }
 
+        public int CompareTo(MyString other)
+        {
+            return Value.CompareTo(other.Value);
+        }
     }
 }
