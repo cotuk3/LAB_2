@@ -50,6 +50,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BinaryTree\BinaryTree.csproj">
+      <Project>{1b084334-b1c9-4b02-b845-6d2f94d59be3}</Project>
+      <Name>BinaryTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InteractWithStorages\InteractWithStorages.csproj">
+      <Project>{df465369-c891-4fab-9b50-8e1a4e5fd34f}</Project>
+      <Name>InteractWithStorages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyString\MyString.csproj">
       <Project>{e94231dd-0501-4272-ab8b-c11aa24e7b0d}</Project>
       <Name>MyString</Name>
