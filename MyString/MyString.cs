@@ -117,5 +117,20 @@ namespace My_String
         {
             return Value.CompareTo(other.Value);
         }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is MyString)
+            {
+                MyString my = (MyString)obj;
+                return Value.Equals(my.Value);
+            }
+            return false;
+        }
     }
 }
