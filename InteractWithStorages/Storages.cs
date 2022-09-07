@@ -7,7 +7,7 @@ namespace InteractWithStorages
     internal static class Storages<T> where T : MyString
     {
 
-        
+
         static T[] array;
         static List<T> list;
         static ArrayList arrList;
@@ -26,18 +26,19 @@ namespace InteractWithStorages
             return arrList;
         }
 
-        static Storages()
+        static public void Init()
         {
-            CreateArrayList();
-            CreateList();
-            array = new T[5]{
+            array = new T[5]
+        {
             (T)new MyString("ABC"),
             (T)new MyString("A"),
             (T)new MyString("AB"),
             (T)new MyString("ABCD"),
-            (T)new MyString("ABCDF"),
-
+            (T)new MyString("ABCDF")
         };
+            CreateArrayList();
+            CreateList();
+
         }
 
         public static List<T> List
