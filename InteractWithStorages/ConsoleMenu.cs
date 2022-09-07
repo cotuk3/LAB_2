@@ -1,24 +1,72 @@
-﻿using System;
+﻿using My_String;
+using System;
 using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using My_String;
 
 namespace InteractWithStorages
 {
     public static class ConsoleMenu
     {
-        public static void Start() // TODO : Second
-        {
 
-        }
         static Exception wrongName = new Exception("Wrong name of collection");
-        public static void Info() // TODO : First
+        public static void Start()
         {
+            Info();
+            Storages<MyString>.Init();
+            string input;
+            do
+            {
+                Console.Write("\nEnter the command:");
+                input = Console.ReadLine();
+                Console.WriteLine();
+                try
+                {
+                    switch (input.ToLower())
+                    {
+                        case "/info":
+                            Info();
+                            break;
+                        case "/add":
+                            AddToStorage();
+                            break;
+                        case "/show":
+                            ShowStorage();
+                            break;
+                        case "/search":
+                            SearchInStorage();
+                            break;
+                        case "/delete":
+                            DeleteFromStorage();
+                            break;
+                        case "/cls":
+                            Console.Clear();
+                            break;
+                        default:
+                            Console.WriteLine("Ther is no such a command");
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+            } while (input.ToLower() != "/end");
 
         }
-        public static void ShowStorage()
+        static void Info()
+        {
+            Console.WriteLine(
+            "All commands:\n" +
+            " /init - initializes storages with default values;" +
+            " /add - add new MyString to selected storage;\n" +
+            " /delete - delete selected MyString from selected storage;\n" +
+            " /show - show selected storage;\n" +
+            " /search - search specific element in selected storage;\n" +
+
+            
+            " /end - end program.");
+        }
+        static void ShowStorage()
         {
             Console.Write("Enter name of the storage you want to get:");
             string name = Console.ReadLine();
@@ -44,13 +92,13 @@ namespace InteractWithStorages
         static void Display(IEnumerable storage)
         {
             int i = 0;
-            foreach(MyString myString in storage)
+            foreach (MyString myString in storage)
             {
                 Console.WriteLine($"{i++}." + myString);
             }
         }
 
-        public static void AddToStorage()
+        static void AddToStorage()
         {
             Console.Write("Enter name of the storage where you want to add MyString:");
             string name = Console.ReadLine();
@@ -89,7 +137,7 @@ namespace InteractWithStorages
             }
         }
 
-        public static void DeleteFromStorage()
+        static void DeleteFromStorage()
         {
             Console.Write("Enter name of storage from which you want to delete MyString:");
             string name = Console.ReadLine();
@@ -126,38 +174,34 @@ namespace InteractWithStorages
             }
         }
 
-        public static void SearchInStorage()
+        static void SearchInStorage()
         {
             Console.Write("Enter name of storage where you want to find element: ");
             string name = Console.ReadLine();
-
-           
-                switch (name.ToLower())
+            switch (name.ToLower())
             {
                 case "list":
-                    contains(Storages<MyString>.List);
+                    contains(Storages<MyString>.List, "List");
                     break;
                 case "arraylist":
-                    contains(Storages<MyString>.ArrayList);
+                    contains(Storages<MyString>.ArrayList, "ArrayList");
                     break;
                 case "array":
-                    contains(Storages<MyString>.Array);
+                    contains(Storages<MyString>.Array, "Array");
                     break;
                 case "binarytree":
-                    
+
                     break;
                 default:
                     throw wrongName;
             }
-
-
         }
 
-        static void contains(IList stor)
+        static void contains(IList stor, string name)
         {
             Console.Write("Enter value of item which you want to find: ");
             string value = Console.ReadLine();
-            Console.WriteLine($"{stor.ToString()} contains {value} : {stor.Contains(value)}");
+            Console.WriteLine($"{name} contains {value} : {stor.Contains(new MyString(value))}");
         }
     }
 }
