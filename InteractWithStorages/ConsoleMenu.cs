@@ -57,7 +57,6 @@ namespace InteractWithStorages
         {
             Console.WriteLine(
             "All commands:\n" +
-            " /init - initializes storages with default values;" +
             " /add - add new MyString to selected storage;\n" +
             " /delete - delete selected MyString from selected storage;\n" +
             " /show - show selected storage;\n" +
@@ -66,10 +65,13 @@ namespace InteractWithStorages
             
             " /end - end program.");
         }
-        static void ShowStorage()
+        static void ShowStorage(string name = null)
         {
-            Console.Write("Enter name of the storage you want to get:");
-            string name = Console.ReadLine();
+            if (name == null)
+            {
+                Console.Write("Enter name of the storage you want to get:");
+                name = Console.ReadLine();
+            }
 
             switch (name.ToLower())
             {
@@ -88,6 +90,7 @@ namespace InteractWithStorages
                 default:
                     throw wrongName;
             }
+
         }
         static void Display(IEnumerable storage)
         {
@@ -163,6 +166,7 @@ namespace InteractWithStorages
                 default:
                     throw wrongName;
             }
+            ShowStorage(name);
         }
         static int del
         {
