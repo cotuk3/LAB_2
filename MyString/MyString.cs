@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace My_String
 {
@@ -145,6 +146,12 @@ namespace My_String
                 return Value.CompareTo(my);
             }
             return -1;
+        }
+
+        public static implicit operator MyString(string value)
+        {
+            MyString my = new MyString(value);
+            return my;
         }
     }
 }
