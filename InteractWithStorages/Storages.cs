@@ -3,6 +3,7 @@ using MyBinaryTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InteractWithStorages
 {
@@ -121,22 +122,28 @@ namespace InteractWithStorages
             }
         }
 
-        public void DeleteFromList(int index)
+        public void DeleteFromList(T value)
         {
-            list.RemoveAt(index);
+            list.Remove(value);
         }
-        public void DeleteFromArrayList(int index)
+        public void DeleteFromArrayList(T value)
         {
-            arrList.RemoveAt(index);
+            arrList.Remove(value);
         }
-        public void DeleteFromArray(int index)
+        public void DeleteFromArray(T value)
         {
-            if (index < array.Length)
+            if (array.Contains<T>(value))
             {
-                System.Array.Copy(array, index, array, index - 1, array.Length - index);
+                int i = 0;
+                for (; i < array.Length; i++)
+                {
+                    if (array[i].Equals(value))
+                        break;
+                }
+                System.Array.Copy(array, i + 1, array, i - 1, array.Length - i);
             }
-            else
-                throw new System.IndexOutOfRangeException();
+
+
         }
         public void DeleteFromBinaryTree(T value) // HACK : implement method 
         {

@@ -9,8 +9,16 @@ namespace InteractWithStorages
     public static class ConsoleMenu
     {
         static Storages<MyString> my = new Storages<MyString>();
-        static Regex regex = new Regex(@"/show\s+(?<name>[A-Za-z]+)");
         static Exception wrongName = new Exception("Wrong name of collection");
+
+        #region Regexes
+        static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)");
+        static Regex regexSearch = new Regex(@"/search\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
+        static Regex regexAdd = new Regex(@"/add\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
+        static Regex regexDelete = new Regex(@"/delete\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
+        #endregion
+
+        #region Start
         public static void Start()
         {
             Info();
@@ -22,10 +30,29 @@ namespace InteractWithStorages
                 Console.WriteLine();
                 try
                 {
-                    Match match = regex.Match(input);
-                    if (match.Success)
+                    Match mShow = regexShow.Match(input);
+                    Match mSearch = regexSearch.Match(input);
+                    Match mAdd = regexAdd.Match(input);
+                    Match mDelete = regexDelete.Match(input);
+
+                    if (mShow.Success)
                     {
-                        ShowStorage(match.Groups["name"].ToString());
+                        ShowStorage(mShow.Groups["name"].ToString());
+                    }
+                    else if (mAdd.Success)
+                    {
+                        AddToStorage(mAdd.Groups["name"].ToString().ToLower(),
+                            mAdd.Groups["value"].ToString());
+                    }
+                    else if (mSearch.Success)
+                    {
+                        SearchInStorage(mSearch.Groups["name"].ToString().ToLower(),
+                            mSearch.Groups["value"].ToString());
+                    }
+                    else if (mDelete.Success)
+                    {
+                        DeleteFromStorage(mDelete.Groups["name"].ToString().ToLower(),
+                            mDelete.Groups["value"].ToString());
                     }
                     else
                     {
@@ -62,7 +89,6 @@ namespace InteractWithStorages
                                 Console.WriteLine("Ther is no such a command");
                                 break;
                         }
-                    
                     }
                 }
                 catch (Exception e)
@@ -86,7 +112,6 @@ namespace InteractWithStorages
 
             " /end - end program.");
         }
-
         static void Storages()
         {
             PropertyInfo[] propertyInfos = typeof(Storages<MyString>).GetProperties();
@@ -97,7 +122,13 @@ namespace InteractWithStorages
             }
             Console.WriteLine();
         }
+        static void Init()
+        {
+            my.Init();
+        }
+        #endregion
 
+        #region Show
         static void ShowStorage(string name = null)
         {
             if (name == null)
@@ -135,114 +166,151 @@ namespace InteractWithStorages
             {
                 Console.WriteLine($"{i++}." + myString);
             }
+            Console.WriteLine();
         }
-        static void Init()
+        #endregion
+
+        #region Add
+        static void AddToStorage(string name = null, string value = null)
         {
-            my.Init();
-        }
-        static void AddToStorage()
-        {
-            Console.Write("Enter name of the storage where you want to add MyString:");
-            string name = Console.ReadLine();
-            switch (name.ToLower())
+            if (name == null)
+            {
+                Console.Write("Enter name of the storage where you want to add MyString:");
+                name = Console.ReadLine();
+            }
+
+            switch (name)
             {
                 case "list":
-                    my.AddToList(add);
+                    my.AddToList(add(value));
                     Display(my.List);
                     break;
                 case "arraylist":
-                    my.AddToArrayList(add);
+                    my.AddToArrayList(add(value));
                     Display(my.List);
                     break;
                 case "array":
-                    my.AddToArray(add);
+                    my.AddToArray(add(value));
                     Display(my.List);
                     break;
                 case "binarytree":
-                    my.AddToBinaryTree(add);
+                    my.AddToBinaryTree(add(value));
                     Display(my.BinaryTree);
                     break;
                 default:
                     throw wrongName;
             }
         }
-        static MyString add
+        static MyString add(string value)
         {
-            get
+            if (value == null)
             {
-                Console.Write("Enter string which you want to add:");
-                string value = Console.ReadLine();
-                MyString myString = new MyString(value);
-                return myString;
+                Console.Write("Enter value which you want to add:");
+                value = Console.ReadLine();
             }
+
+            MyString myString = new MyString(value);
+            return myString;
         }
+        #endregion
 
-        static void DeleteFromStorage()
+        #region Delete
+        static void DeleteFromStorage(string name = null, string value = null)
         {
-            Console.Write("Enter name of storage from which you want to delete MyString:");
-            string name = Console.ReadLine();
-
-            switch (name.ToLower())
+            if (name == null)
+            {
+                Console.Write("Enter name of storage from which you want to delete MyString:");
+                name = Console.ReadLine().ToLower();
+            }
+             
+            switch (name)
             {
                 case "list":
                     Display(my.List);
-                    my.DeleteFromList(del);
+                    my.DeleteFromList(del(value));
                     break;
                 case "arraylist":
                     Display(my.ArrayList);
-                    my.DeleteFromArrayList(del);
+                    my.DeleteFromArrayList(del(value));
                     break;
                 case "array":
                     Display(my.Array);
-                    my.DeleteFromArray(del);
+                    my.DeleteFromArray(del(value));
                     break;
                 case "binarytree":
                     Display(my.BinaryTree);
-                    MyString value = my.BinaryTree.PostOrderTraversal()[del];
-                    my.DeleteFromBinaryTree(value);
+                    my.DeleteFromBinaryTree(del(value));
                     break;
                 default:
                     throw wrongName;
             }
             ShowStorage(name);
         }
-        static int del
+        static MyString del(string value)
         {
-            get
+            if (value == null)
             {
-                Console.Write("Enter index of MyString you want to delete: ");
-                int index = Int32.Parse(Console.ReadLine());
-                return index;
+                Console.Write("Enter value of MyString you want to delete: ");
+                value = Console.ReadLine();
             }
-        }
 
-        static void SearchInStorage()
+            return value;
+
+        }
+        #endregion
+
+        #region Search
+        static void SearchInStorage(string name = null, string value = null)
         {
-            Console.Write("Enter name of storage where you want to find element: ");
-            string name = Console.ReadLine();
-            switch (name.ToLower())
+            if (name == null)
+            {
+                Console.Write("Enter name of storage where you want to find element: ");
+                name = Console.ReadLine().ToLower();
+            }
+
+            switch (name)
             {
                 case "list":
-                    contains(my.List, "List");
+                    contains(name, value, my.List);
                     break;
                 case "arraylist":
-                    contains(my.ArrayList, "ArrayList");
+                    contains(name, value, my.ArrayList);
                     break;
                 case "array":
-                    contains(my.Array, "Array");
+                    contains(name, value, my.Array);
                     break;
                 case "binarytree":
-
+                    contains(name, value);
                     break;
                 default:
                     throw wrongName;
             }
         }
-        static void contains(IList stor, string name)
+        static void contains(string name, string value, IList stor = null)
         {
-            Console.Write("Enter value of item which you want to find: ");
-            string value = Console.ReadLine();
-            Console.WriteLine($"{name} contains {value} : {stor.Contains(new MyString(value))}");
+
+            if (name == "binarytree" && value == null)
+            {
+                Console.Write("Enter value of item which you want to find: ");
+                value = Console.ReadLine();
+            }
+            else if (name == "binarytree" && value != null)
+            {
+                Console.WriteLine($"{name} contains {value}: {my.BinaryTree.Contains(new MyString(value))}");
+                return;
+            }
+
+
+            if (stor == null)
+                throw new Exception("Storage is Empty!");
+            else if (value == null)
+            {
+                Console.Write("Enter value of item which you want to find: ");
+                value = Console.ReadLine();
+            }
+            Console.WriteLine($"{name} contains {value}: {stor.Contains(new MyString(value))}");
+
         }
+        #endregion
     }
 }
