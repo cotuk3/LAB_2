@@ -42,23 +42,21 @@ namespace MyBinaryTree
         void add(BinaryTreeNode<T> root, T value)
         {
             BinaryTreeNode<T> current = new BinaryTreeNode<T>(value);
-
-            if (current.CompareNode(root) < 0)
+            int res = current.CompareNode(root);
+            if (res < 0)
             {
                 if (root.Left != null)
                     add(root.Left, value);
                 else
                     root.Left = current;
             }
-            else
+            else if(res > 0)
             {
                 if (root.Right != null)
                     add(root.Right, value);
                 else
                     root.Right = current;
             }
-
-
         }
 
         public void Clear()
@@ -71,7 +69,7 @@ namespace MyBinaryTree
         {
             return FindNodeWithParent(item).node != null;
         }
-        (BinaryTreeNode<T> node, BinaryTreeNode<T> root) FindNodeWithParent(T Value)
+        (BinaryTreeNode<T> node, BinaryTreeNode<T> parent) FindNodeWithParent(T Value)
         {
             BinaryTreeNode<T> node = root;
             BinaryTreeNode<T> parent = null;
@@ -109,7 +107,7 @@ namespace MyBinaryTree
             {
                 count--;
                 BinaryTreeNode<T> node = FindNodeWithParent(item).node;
-                BinaryTreeNode<T> parent = FindNodeWithParent(item).root;
+                BinaryTreeNode<T> parent = FindNodeWithParent(item).parent;
 
                 if (node.Right == null)
                 {
@@ -117,9 +115,63 @@ namespace MyBinaryTree
                         root = node.Left;
                     else
                     {
-                        
+                        int res = node.CompareNode(parent);
+                        if (res > 0)
+                            parent.Right = node.Left;
+                        else if (res < 0)
+                            parent.Left = node.Left;
                     }
+                        
                 }
+                else if (node.Right.Left == null)
+                {
+                    node.Right.Left = node.Left;
+
+                    if (node == root)
+                        root = node.Right;
+                    else
+                    {
+                        int res = node.CompareNode(parent);
+                        if (res > 0)
+                            parent.Right = node.Right;
+                        else if (res < 0)
+                            parent.Left = node.Right;
+                    }
+                        
+
+                }
+                else
+                {
+                    BinaryTreeNode<T> mostLeft = node.Right.Left;
+                    BinaryTreeNode<T> mostLeftParent = node.Right;
+
+                    while (mostLeft != null)
+                    {
+                        mostLeftParent = mostLeft;
+                        mostLeft = mostLeft.Left;
+                    }
+
+                    mostLeftParent.Left = mostLeft.Right;
+                    mostLeft.Left = node.Left;
+                    mostLeft.Right = node.Right;
+
+
+                    if (node == root)
+                        root = mostLeft;
+                    else
+                    {
+                        int res = node.CompareNode(parent);
+
+                        if (res > 0)
+                            parent.Right = mostLeft;
+                        else if (res < 0)
+                            parent.Left = mostLeft;
+
+
+                    }
+
+                }
+                return true;
             }
             return false;
         }
@@ -159,8 +211,6 @@ namespace MyBinaryTree
         }
 
         #endregion
-
-
 
     }
 }

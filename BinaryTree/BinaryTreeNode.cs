@@ -12,8 +12,7 @@ namespace MyBinaryTree
         {
             Value = value;
         }
-
-        public TNode Value{ get; set; }
+        public TNode Value{ get; private set; }
         public BinaryTreeNode<TNode> Left { get; set; }
         public BinaryTreeNode<TNode> Right { get; set; }
 
