@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Reflection;
+using System.Collections;
 
 namespace My_String
 {
-    public class MyString : IComparable<MyString> // +
+
+    public class MyString : IComparable<MyString>, IComparable// +
     {
+        CaseInsensitiveComparer comparer = new CaseInsensitiveComparer();
         char[] value;
 
         public MyString(string value)
@@ -28,7 +30,7 @@ namespace My_String
             }
         }
 
-        public (bool , char[])IsSubString(string subString)
+        public (bool, char[]) IsSubString(string subString)
         {
             if (subString != null && subString.Length <= Value.Length)
             {
@@ -55,7 +57,7 @@ namespace My_String
                 if (subString.Length == lcs[rows, columns])
                     return (true, res);
             }
-                return (false, null);
+            return (false, null);
         } // +
 
         public void InsertSubString(string subString, int index)
@@ -115,7 +117,9 @@ namespace My_String
 
         public int CompareTo(MyString other)
         {
-            return Value.CompareTo(other.Value);
+            
+            return comparer.Compare(Value, other.Value);
+            //return Value.CompareTo(other.Value);
         }
 
         public override int GetHashCode()
@@ -131,6 +135,16 @@ namespace My_String
                 return Value.Equals(my.Value);
             }
             return false;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is MyString)
+            {
+                var my = obj as MyString;
+                return Value.CompareTo(my);
+            }
+            return -1;
         }
     }
 }
