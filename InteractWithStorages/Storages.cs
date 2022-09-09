@@ -1,51 +1,55 @@
 ﻿using My_String;
+using MyBinaryTree;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using MyBinaryTree;
 
 namespace InteractWithStorages
 {
-    internal static class Storages<T> where T : MyString
+    internal class Storages<T> where T : class, IComparable<T>
     {
-        static T[] array;
-        static List<T> list;
-        static ArrayList arrList;
-        static BinaryTree<T> binarytree;
+        MyString[] initArray;
+        T[] array;
+        List<T> list;
+        ArrayList arrList;
+        BinaryTree<T> binarytree;
 
-        static List<T> CreateList()
+        List<T> CreateList()
         {
             list = new List<T>();
             list.AddRange(array);
             return list;
         }
-        static ArrayList CreateArrayList()
+        ArrayList CreateArrayList()
         {
             arrList = new ArrayList();
             arrList.AddRange(array);
             return arrList;
         }
-        static BinaryTree<T> CreateBinaryTree()
+        BinaryTree<T> CreateBinaryTree()
         {
             binarytree = new BinaryTree<T>(array);
             return binarytree;
         }
 
-        static public void Init()
+        public void Init()
         {
-            array = new T[5]
-        {
-            (T)new MyString("ABC"),
-            (T)new MyString("A"),
-            (T)new MyString("AB"),
-            (T)new MyString("ABCD"),
-            (T)new MyString("ABCDF")
-        };
+            initArray = new MyString[5]
+            {
+            new MyString("ABC"),
+            new MyString("A"),
+            new MyString("AB"),
+            new MyString("ABCD"),
+            new MyString("ABCDF")
+            };
+            array = new T[initArray.Length];
+            System.Array.Copy(initArray, array, array.Length);
             CreateArrayList();
             CreateList();
             CreateBinaryTree();
         }
 
-        public static List<T> List
+        public List<T> List
         {
             get
             {
@@ -57,7 +61,7 @@ namespace InteractWithStorages
             }
         }
 
-        public static ArrayList ArrayList
+        public ArrayList ArrayList
         {
             get
             {
@@ -69,7 +73,7 @@ namespace InteractWithStorages
             }
         }
 
-        public static T[] Array
+        public T[] Array
         {
             get
             {
@@ -80,21 +84,21 @@ namespace InteractWithStorages
                 array = value;
             }
         }
-        public static BinaryTree<T> BinaryTree
+        public BinaryTree<T> BinaryTree
         {
             get { return binarytree; }
             set { binarytree = value; }
         }
 
-        public static void AddToList(params T[] value)
+        public void AddToList(params T[] value)
         {
             list.AddRange(value);
         }
-        public static void AddToArrayList(params T[] value)
+        public void AddToArrayList(params T[] value)
         {
             arrList.AddRange(value);
         }
-        public static void AddToArray(params T[] values)
+        public void AddToArray(params T[] values)
         {
             T[] newArr = new T[array.Length + values.Length];
 
@@ -109,7 +113,7 @@ namespace InteractWithStorages
 
             array = newArr;
         }
-        public static void AddToBinaryTree(params T[] values)
+        public void AddToBinaryTree(params T[] values)
         {
             foreach (T item in values)
             {
@@ -117,15 +121,15 @@ namespace InteractWithStorages
             }
         }
 
-        public static void DeleteFromList(int index)
+        public void DeleteFromList(int index)
         {
             list.RemoveAt(index);
         }
-        public static void DeleteFromArrayList(int index)
+        public void DeleteFromArrayList(int index)
         {
             arrList.RemoveAt(index);
         }
-        public static void DeleteFromArray(int index)
+        public void DeleteFromArray(int index)
         {
             if (index < array.Length)
             {
@@ -134,9 +138,9 @@ namespace InteractWithStorages
             else
                 throw new System.IndexOutOfRangeException();
         }
-        public static void DeleteFromBinaryTree(T value) // HACK : implement method 
+        public void DeleteFromBinaryTree(T value) // HACK : implement method 
         {
-
+            binarytree.Remove(value);
         }
     }
 }
