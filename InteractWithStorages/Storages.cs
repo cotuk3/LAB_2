@@ -1,17 +1,16 @@
 ﻿using My_String;
 using System.Collections;
 using System.Collections.Generic;
+using MyBinaryTree;
 
 namespace InteractWithStorages
 {
     internal static class Storages<T> where T : MyString
     {
-
-
         static T[] array;
         static List<T> list;
         static ArrayList arrList;
-
+        static BinaryTree<T> binarytree;
 
         static List<T> CreateList()
         {
@@ -24,6 +23,11 @@ namespace InteractWithStorages
             arrList = new ArrayList();
             arrList.AddRange(array);
             return arrList;
+        }
+        static BinaryTree<T> CreateBinaryTree()
+        {
+            binarytree = new BinaryTree<T>(array);
+            return binarytree;
         }
 
         static public void Init()
@@ -38,7 +42,7 @@ namespace InteractWithStorages
         };
             CreateArrayList();
             CreateList();
-
+            CreateBinaryTree();
         }
 
         public static List<T> List
@@ -76,6 +80,11 @@ namespace InteractWithStorages
                 array = value;
             }
         }
+        public static BinaryTree<T> BinaryTree
+        {
+            get { return binarytree; }
+            set { binarytree = value; }
+        }
 
         public static void AddToList(params T[] value)
         {
@@ -100,6 +109,13 @@ namespace InteractWithStorages
 
             array = newArr;
         }
+        public static void AddToBinaryTree(params T[] values)
+        {
+            foreach (T item in values)
+            {
+                binarytree.Add(item);
+            }
+        }
 
         public static void DeleteFromList(int index)
         {
@@ -118,6 +134,9 @@ namespace InteractWithStorages
             else
                 throw new System.IndexOutOfRangeException();
         }
+        public static void DeleteFromBinaryTree(T value) // HACK : implement method 
+        {
 
+        }
     }
 }
