@@ -1,17 +1,19 @@
 ﻿using My_String;
 using System;
 using System.Collections;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace InteractWithStorages
 {
     public static class ConsoleMenu
     {
-
+        static Storages<MyString> my = new Storages<MyString>();
+        static Regex regex = new Regex(@"/show\s+(?<name>[A-Za-z]+)");
         static Exception wrongName = new Exception("Wrong name of collection");
         public static void Start()
         {
             Info();
-            Storages<MyString>.Init();
             string input;
             do
             {
@@ -20,34 +22,47 @@ namespace InteractWithStorages
                 Console.WriteLine();
                 try
                 {
-                    switch (input.ToLower())
+                    Match match = regex.Match(input);
+                    if (match.Success)
                     {
-                        case "/info":
-                            Info();
-                            break;
-                        case "/add":
-                            Storages();
-                            AddToStorage();
-                            break;
-                        case "/storages":
-                            Storages();
-                            break;
-                        case "/show":
-                            Storages();
-                            ShowStorage();
-                            break;
-                        case "/search":
-                            SearchInStorage();
-                            break;
-                        case "/delete":
-                            DeleteFromStorage();
-                            break;
-                        case "/cls":
-                            Console.Clear();
-                            break;
-                        default:
-                            Console.WriteLine("Ther is no such a command");
-                            break;
+                        ShowStorage(match.Groups["name"].ToString());
+                    }
+                    else
+                    {
+                        switch (input.ToLower())
+                        {
+                            case "/info":
+                                Info();
+                                break;
+                            case "/init":
+                                Init();
+                                break;
+                            case "/add":
+                                Storages();
+                                AddToStorage();
+                                break;
+                            case "/storages":
+                                Storages();
+                                break;
+                            case "/show":
+                                Storages();
+                                ShowStorage();
+                                break;
+                            case "/search":
+                                SearchInStorage();
+                                break;
+                            case "/delete":
+                                Storages();
+                                DeleteFromStorage();
+                                break;
+                            case "/cls":
+                                Console.Clear();
+                                break;
+                            default:
+                                Console.WriteLine("Ther is no such a command");
+                                break;
+                        }
+                    
                     }
                 }
                 catch (Exception e)
@@ -62,6 +77,7 @@ namespace InteractWithStorages
         {
             Console.WriteLine(
             "All commands:\n" +
+            " /init - inizialize storages with default values;\n" +
             " /add - add new MyString to selected storage;\n" +
             " /storages - list of available storages;" +
             " /delete - delete selected MyString from selected storage;\n" +
@@ -73,7 +89,13 @@ namespace InteractWithStorages
 
         static void Storages()
         {
-            Console.WriteLine("Available storages: List, ArrayList, Array, BinaryTree;");
+            PropertyInfo[] propertyInfos = typeof(Storages<MyString>).GetProperties();
+            Console.Write("Storages are available: ");
+            foreach (PropertyInfo property in propertyInfos)
+            {
+                Console.Write(property.Name + ", ");
+            }
+            Console.WriteLine();
         }
 
         static void ShowStorage(string name = null)
@@ -87,16 +109,16 @@ namespace InteractWithStorages
             switch (name.ToLower())
             {
                 case "list":
-                    Display(Storages<MyString>.List);
+                    Display(my.List);
                     break;
                 case "arraylist":
-                    Display(Storages<MyString>.ArrayList);
+                    Display(my.ArrayList);
                     break;
                 case "array":
-                    Display(Storages<MyString>.Array);
+                    Display(my.Array);
                     break;
                 case "binarytree":
-                    Display(Storages<MyString>.BinaryTree);
+                    Display(my.BinaryTree);
                     break;
                 default:
                     throw wrongName;
@@ -106,12 +128,18 @@ namespace InteractWithStorages
         static void Display(IEnumerable storage)
         {
             int i = 0;
+            if (storage == null)
+                throw new Exception("Storage is Empty!");
+
             foreach (MyString myString in storage)
             {
                 Console.WriteLine($"{i++}." + myString);
             }
         }
-
+        static void Init()
+        {
+            my.Init();
+        }
         static void AddToStorage()
         {
             Console.Write("Enter name of the storage where you want to add MyString:");
@@ -119,26 +147,24 @@ namespace InteractWithStorages
             switch (name.ToLower())
             {
                 case "list":
-                    Storages<MyString>.AddToList(add);
-                    Display(Storages<MyString>.List);
+                    my.AddToList(add);
+                    Display(my.List);
                     break;
                 case "arraylist":
-                    Storages<MyString>.AddToArrayList(add);
-                    Display(Storages<MyString>.List);
+                    my.AddToArrayList(add);
+                    Display(my.List);
                     break;
                 case "array":
-                    Storages<MyString>.AddToArray(add);
-                    Display(Storages<MyString>.List);
+                    my.AddToArray(add);
+                    Display(my.List);
                     break;
                 case "binarytree":
-                    //Display(Storages<MyString>.List);
+                    my.AddToBinaryTree(add);
+                    Display(my.BinaryTree);
                     break;
                 default:
                     throw wrongName;
             }
-
-
-
         }
         static MyString add
         {
@@ -159,20 +185,21 @@ namespace InteractWithStorages
             switch (name.ToLower())
             {
                 case "list":
-                    Display(Storages<MyString>.List);
-                    Storages<MyString>.DeleteFromList(del);
+                    Display(my.List);
+                    my.DeleteFromList(del);
                     break;
                 case "arraylist":
-                    Display(Storages<MyString>.ArrayList);
-                    Storages<MyString>.DeleteFromArrayList(del);
+                    Display(my.ArrayList);
+                    my.DeleteFromArrayList(del);
                     break;
                 case "array":
-                    Display(Storages<MyString>.Array);
-                    Storages<MyString>.DeleteFromArray(del);
+                    Display(my.Array);
+                    my.DeleteFromArray(del);
                     break;
                 case "binarytree":
-                    Display(Storages<MyString>.BinaryTree);
-
+                    Display(my.BinaryTree);
+                    MyString value = my.BinaryTree.PostOrderTraversal()[del];
+                    my.DeleteFromBinaryTree(value);
                     break;
                 default:
                     throw wrongName;
@@ -196,13 +223,13 @@ namespace InteractWithStorages
             switch (name.ToLower())
             {
                 case "list":
-                    contains(Storages<MyString>.List, "List");
+                    contains(my.List, "List");
                     break;
                 case "arraylist":
-                    contains(Storages<MyString>.ArrayList, "ArrayList");
+                    contains(my.ArrayList, "ArrayList");
                     break;
                 case "array":
-                    contains(Storages<MyString>.Array, "Array");
+                    contains(my.Array, "Array");
                     break;
                 case "binarytree":
 
