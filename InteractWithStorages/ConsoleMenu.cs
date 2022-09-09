@@ -26,9 +26,14 @@ namespace InteractWithStorages
                             Info();
                             break;
                         case "/add":
+                            Storages();
                             AddToStorage();
                             break;
+                        case "/storages":
+                            Storages();
+                            break;
                         case "/show":
+                            Storages();
                             ShowStorage();
                             break;
                         case "/search":
@@ -58,13 +63,19 @@ namespace InteractWithStorages
             Console.WriteLine(
             "All commands:\n" +
             " /add - add new MyString to selected storage;\n" +
+            " /storages - list of available storages;" +
             " /delete - delete selected MyString from selected storage;\n" +
             " /show - show selected storage;\n" +
             " /search - search specific element in selected storage;\n" +
 
-            
             " /end - end program.");
         }
+
+        static void Storages()
+        {
+            Console.WriteLine("Available storages: List, ArrayList, Array, BinaryTree;");
+        }
+
         static void ShowStorage(string name = null)
         {
             if (name == null)
@@ -85,7 +96,7 @@ namespace InteractWithStorages
                     Display(Storages<MyString>.Array);
                     break;
                 case "binarytree":
-                    //Display(Storages<MyString>.List);
+                    Display(Storages<MyString>.BinaryTree);
                     break;
                 default:
                     throw wrongName;
@@ -160,7 +171,7 @@ namespace InteractWithStorages
                     Storages<MyString>.DeleteFromArray(del);
                     break;
                 case "binarytree":
-                    //Display(Storages<MyString>.Array);
+                    Display(Storages<MyString>.BinaryTree);
 
                     break;
                 default:
@@ -200,7 +211,6 @@ namespace InteractWithStorages
                     throw wrongName;
             }
         }
-
         static void contains(IList stor, string name)
         {
             Console.Write("Enter value of item which you want to find: ");
