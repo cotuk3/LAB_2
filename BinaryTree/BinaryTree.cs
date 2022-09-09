@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,13 @@ namespace MyBinaryTree
             root = null;
             count = 0;
         }
-
+        public BinaryTree(IEnumerable storage)
+        {
+            foreach (T item in storage)
+            {
+                Add(item);
+            }
+        }
         
         #region ICollection<T>
         public int Count => count;
@@ -28,25 +35,27 @@ namespace MyBinaryTree
             if(root == null)
                 root = new BinaryTreeNode<T>(item);
             else
-                addto(root, item);
+                add(root, item);
 
             count++;
         }
-        void addto(BinaryTreeNode<T> root, T value)
+        void add(BinaryTreeNode<T> root, T value)
         {
-            if (value.CompareTo(root.Value) < 0)
+            BinaryTreeNode<T> current = new BinaryTreeNode<T>(value);
+
+            if (current.CompareNode(root) < 0)
             {
                 if (root.Left != null)
-                    addto(root.Left, value);
+                    add(root.Left, value);
                 else
-                    root.Left = new BinaryTreeNode<T>(value);
+                    root.Left = current;
             }
             else
             {
                 if (root.Right != null)
-                    addto(root.Right, value);
+                    add(root.Right, value);
                 else
-                    root.Right = new BinaryTreeNode<T>(value);
+                    root.Right = current;
             }
 
 
@@ -88,7 +97,10 @@ namespace MyBinaryTree
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            for (int i = arrayIndex; i < array.Length; i++)
+            {
+                array[i] = PostOrderTraversal()[i];
+            }
         }
 
         public bool Remove(T item)
@@ -116,12 +128,12 @@ namespace MyBinaryTree
         #region IEnumerator<T>
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return PostOrderTraversal().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator();
         }
 
 
@@ -130,15 +142,25 @@ namespace MyBinaryTree
         #region Post Order Traversal
         public List<T> PostOrderTraversal()
         {
-            return PostOrderTraversal(root);
+            List<T> list = new List<T>();
+            return PostOrderTraversal(root,ref list);
         }
-        public List<T> PostOrderTraversal(BinaryTreeNode<T> root)
+        List<T> PostOrderTraversal(BinaryTreeNode<T> root,ref List<T> list)
         {
+            if(root.Left != null)
+                PostOrderTraversal(root.Left,ref list);
 
-            return null;
+            if (root.Right != null)
+                PostOrderTraversal(root.Right, ref list);
+
+            list.Add(root.Value);
+
+            return list;
         }
 
         #endregion
+
+
 
     }
 }

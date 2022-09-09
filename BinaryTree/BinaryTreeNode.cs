@@ -22,7 +22,7 @@ namespace MyBinaryTree
         {
             return Value.CompareTo(other);
         }
-        public int CompareToNodes(BinaryTreeNode<TNode> other)
+        public int CompareNode(BinaryTreeNode<TNode> other)
         {
             return Value.CompareTo(other.Value);
         }
