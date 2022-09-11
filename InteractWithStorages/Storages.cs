@@ -15,24 +15,13 @@ namespace InteractWithStorages
         ArrayList arrList;
         BinaryTree<T> binarytree;
 
-        List<T> CreateList()
+        public Storages()
         {
+            array = new T[0];
             list = new List<T>();
-            list.AddRange(array);
-            return list;
-        }
-        ArrayList CreateArrayList()
-        {
             arrList = new ArrayList();
-            arrList.AddRange(array);
-            return arrList;
+            binarytree = new BinaryTree<T>();
         }
-        BinaryTree<T> CreateBinaryTree()
-        {
-            binarytree = new BinaryTree<T>(array);
-            return binarytree;
-        }
-
         public void Init()
         {
             initArray = new MyString[5]
@@ -50,86 +39,64 @@ namespace InteractWithStorages
             CreateBinaryTree();
         }
 
+        #region List
+        List<T> CreateList()
+        {
+            list.AddRange(array);
+            return list;
+        }
         public List<T> List
         {
-            get
-            {
-                return list;
-            }
-            set
-            {
-                list = value;
-            }
+            get => list;
         }
+        #endregion
 
+        #region ArrayList
+        ArrayList CreateArrayList()
+        {
+            arrList.AddRange(array);
+            return arrList;
+        }
         public ArrayList ArrayList
         {
-            get
-            {
-                return arrList;
-            }
-            set
-            {
-                arrList = value;
-            }
+            get => arrList;
         }
+        #endregion
 
-        public T[] Array
+        #region BinaryTree
+        BinaryTree<T> CreateBinaryTree()
         {
-            get
-            {
-                return array;
-            }
-            set
-            {
-                array = value;
-            }
+            binarytree = new BinaryTree<T>(array);
+            return binarytree;
         }
         public BinaryTree<T> BinaryTree
         {
-            get { return binarytree; }
-            set { binarytree = value; }
+            get => binarytree;
         }
+        #endregion
 
-        public void AddToList(params T[] value)
+        #region Array
+        public T[] Array
         {
-            list.AddRange(value);
-        }
-        public void AddToArrayList(params T[] value)
+            get =>  array;            
+        }   
+        public void AddToArray(T value)
         {
-            arrList.AddRange(value);
-        }
-        public void AddToArray(params T[] values)
-        {
-            T[] newArr = new T[array.Length + values.Length];
+            if (array.Length == 0)
+            {
+                array = new T[1];
+                array[0] = value;
+                return;
+            }
 
+            T[] newArr = new T[array.Length + 1];
             int i = 0;
             for (; i < array.Length; i++)
                 newArr[i] = array[i];
 
-            for (int j = 0; j < values.Length; j++, i++)
-            {
-                newArr[i] = values[j];
-            }
-
+            newArr[newArr.Length - 1] = value;
             array = newArr;
-        }
-        public void AddToBinaryTree(params T[] values)
-        {
-            foreach (T item in values)
-            {
-                binarytree.Add(item);
-            }
-        }
-
-        public void DeleteFromList(T value)
-        {
-            list.Remove(value);
-        }
-        public void DeleteFromArrayList(T value)
-        {
-            arrList.Remove(value);
-        }
+        }          
         public void DeleteFromArray(T value)
         {
             if (array.Contains<T>(value))
@@ -145,9 +112,9 @@ namespace InteractWithStorages
 
 
         }
-        public void DeleteFromBinaryTree(T value) // HACK : implement method 
-        {
-            binarytree.Remove(value);
-        }
+        #endregion
+
+        public void AddToStorage(dynamic storage, T value) => storage.Add(value);
+        public void DeleteFromStorage(dynamic storage, T value) => storage.Delete(value);
     }
 }
