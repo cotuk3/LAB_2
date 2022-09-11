@@ -30,66 +30,7 @@ namespace InteractWithStorages
                 Console.WriteLine();
                 try
                 {
-                    Match mShow = regexShow.Match(input);
-                    Match mSearch = regexSearch.Match(input);
-                    Match mAdd = regexAdd.Match(input);
-                    Match mDelete = regexDelete.Match(input);
-
-                    if (mShow.Success)
-                    {
-                        ShowStorage(mShow.Groups["name"].ToString());
-                    }
-                    else if (mAdd.Success)
-                    {
-                        AddToStorage(mAdd.Groups["name"].ToString().ToLower(),
-                            mAdd.Groups["value"].ToString());
-                    }
-                    else if (mSearch.Success)
-                    {
-                        SearchInStorage(mSearch.Groups["name"].ToString().ToLower(),
-                            mSearch.Groups["value"].ToString());
-                    }
-                    else if (mDelete.Success)
-                    {
-                        DeleteFromStorage(mDelete.Groups["name"].ToString().ToLower(),
-                            mDelete.Groups["value"].ToString());
-                    }
-                    else
-                    {
-                        switch (input.ToLower())
-                        {
-                            case "/info":
-                                Info();
-                                break;
-                            case "/init":
-                                Init();
-                                break;
-                            case "/add":
-                                Storages();
-                                AddToStorage();
-                                break;
-                            case "/storages":
-                                Storages();
-                                break;
-                            case "/show":
-                                Storages();
-                                ShowStorage();
-                                break;
-                            case "/search":
-                                SearchInStorage();
-                                break;
-                            case "/delete":
-                                Storages();
-                                DeleteFromStorage();
-                                break;
-                            case "/cls":
-                                Console.Clear();
-                                break;
-                            default:
-                                Console.WriteLine("Ther is no such a command");
-                                break;
-                        }
-                    }
+                    CheckForLongExpression(input);
                 }
                 catch (Exception e)
                 {
@@ -126,6 +67,76 @@ namespace InteractWithStorages
         {
             my.Init();
         }
+        static void CheckForLongExpression(string input)
+        {
+            bool isMatch = regexShow.IsMatch(input) || regexSearch.IsMatch(input)
+                || regexDelete.IsMatch(input) || regexAdd.IsMatch(input);
+
+            if (isMatch)
+            {
+                Match show = regexShow.Match(input);
+                Match search = regexSearch.Match(input);
+                Match add = regexAdd.Match(input);
+                Match delete = regexDelete.Match(input);
+
+                if (show.Success)
+                {
+                    ShowStorage(show.Groups["name"].ToString());
+                }
+                else if (add.Success)
+                {
+                    AddToStorage(add.Groups["name"].ToString().ToLower(),
+                        add.Groups["value"].ToString());
+                }
+                else if (search.Success)
+                {
+                    SearchInStorage(search.Groups["name"].ToString().ToLower(),
+                        search.Groups["value"].ToString());
+                }
+                else if (delete.Success)
+                {
+                    DeleteFromStorage(delete.Groups["name"].ToString().ToLower(),
+                        delete.Groups["value"].ToString());
+                }
+            }
+            else
+            {
+                switch (input.ToLower())
+                {
+                    case "/info":
+                        Info();
+                        break;
+                    case "/init":
+                        Init();
+                        break;
+                    case "/add":
+                        Storages();
+                        AddToStorage();
+                        break;
+                    case "/storages":
+                        Storages();
+                        break;
+                    case "/show":
+                        Storages();
+                        ShowStorage();
+                        break;
+                    case "/search":
+                        SearchInStorage();
+                        break;
+                    case "/delete":
+                        Storages();
+                        DeleteFromStorage();
+                        break;
+                    case "/cls":
+                        Console.Clear();
+                        Info();
+                        break;
+                    default:
+                        Console.WriteLine("Ther is no such a command");
+                        break;
+                }
+            }
+        }
         #endregion
 
         #region Show
@@ -136,7 +147,6 @@ namespace InteractWithStorages
                 Console.Write("Enter name of the storage you want to get:");
                 name = Console.ReadLine();
             }
-
             switch (name.ToLower())
             {
                 case "list":
@@ -154,18 +164,18 @@ namespace InteractWithStorages
                 default:
                     throw wrongName;
             }
-
         }
         static void Display(IEnumerable storage)
         {
-            int i = 0;
-            if (storage == null)
-                throw new Exception("Storage is Empty!");
-
+            int i = -1;
             foreach (MyString myString in storage)
             {
-                Console.WriteLine($"{i++}." + myString);
+                Console.WriteLine($"{++i}." + myString);
             }
+
+            if(i == -1)
+                throw new Exception("Storage is Empty!");
+
             Console.WriteLine();
         }
         #endregion
@@ -178,23 +188,22 @@ namespace InteractWithStorages
                 Console.Write("Enter name of the storage where you want to add MyString:");
                 name = Console.ReadLine();
             }
-
             switch (name)
             {
                 case "list":
-                    my.AddToList(add(value));
+                    my.AddToStorage(my.List, add(value));
                     Display(my.List);
                     break;
                 case "arraylist":
-                    my.AddToArrayList(add(value));
-                    Display(my.List);
+                    my.AddToStorage(my.ArrayList, add(value));
+                    Display(my.ArrayList);
                     break;
                 case "array":
                     my.AddToArray(add(value));
-                    Display(my.List);
+                    Display(my.Array);
                     break;
                 case "binarytree":
-                    my.AddToBinaryTree(add(value));
+                    my.AddToStorage(my.BinaryTree, add(value));
                     Display(my.BinaryTree);
                     break;
                 default:
@@ -222,16 +231,15 @@ namespace InteractWithStorages
                 Console.Write("Enter name of storage from which you want to delete MyString:");
                 name = Console.ReadLine().ToLower();
             }
-             
             switch (name)
             {
                 case "list":
                     Display(my.List);
-                    my.DeleteFromList(del(value));
+                    my.DeleteFromStorage(my.List, del(value));
                     break;
                 case "arraylist":
                     Display(my.ArrayList);
-                    my.DeleteFromArrayList(del(value));
+                    my.DeleteFromStorage(my.ArrayList, del(value));
                     break;
                 case "array":
                     Display(my.Array);
@@ -239,7 +247,7 @@ namespace InteractWithStorages
                     break;
                 case "binarytree":
                     Display(my.BinaryTree);
-                    my.DeleteFromBinaryTree(del(value));
+                    my.DeleteFromStorage(my.BinaryTree, del(value));
                     break;
                 default:
                     throw wrongName;
