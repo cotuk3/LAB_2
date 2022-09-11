@@ -78,8 +78,8 @@ namespace InteractWithStorages
         #region Array
         public T[] Array
         {
-            get =>  array;            
-        }   
+            get => array;
+        }
         public void AddToArray(T value)
         {
             if (array.Length == 0)
@@ -96,7 +96,7 @@ namespace InteractWithStorages
 
             newArr[newArr.Length - 1] = value;
             array = newArr;
-        }          
+        }
         public void DeleteFromArray(T value)
         {
             if (array.Contains<T>(value))

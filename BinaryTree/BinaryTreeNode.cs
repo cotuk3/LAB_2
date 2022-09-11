@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyBinaryTree
 {
@@ -12,7 +8,7 @@ namespace MyBinaryTree
         {
             Value = value;
         }
-        public TNode Value{ get; private set; }
+        public TNode Value { get; private set; }
         public BinaryTreeNode<TNode> Left { get; set; }
         public BinaryTreeNode<TNode> Right { get; set; }
 

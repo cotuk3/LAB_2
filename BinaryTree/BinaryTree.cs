@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyBinaryTree
 {
-    public class BinaryTree<T> : IEnumerable<T>, ICollection<T> where T: class, IComparable<T>
+    public class BinaryTree<T> : IEnumerable<T>, ICollection<T> where T : class, IComparable<T>
     {
         BinaryTreeNode<T> root;
         int count;
@@ -25,14 +21,14 @@ namespace MyBinaryTree
                 Add(item);
             }
         }
-        
+
         #region ICollection<T>
         public int Count => count;
         public bool IsReadOnly => false;
 
         public void Add(T item)
         {
-            if(root == null)
+            if (root == null)
                 root = new BinaryTreeNode<T>(item);
             else
                 add(root, item);
@@ -50,7 +46,7 @@ namespace MyBinaryTree
                 else
                     root.Left = current;
             }
-            else if(res > 0)
+            else if (res > 0)
             {
                 if (root.Right != null)
                     add(root.Right, value);
@@ -77,7 +73,7 @@ namespace MyBinaryTree
             while (node != null)
             {
                 int res = Value.CompareTo(node.Value);
-                if (res > 0) 
+                if (res > 0)
                 {
                     parent = node;
                     node = node.Right;
@@ -121,7 +117,7 @@ namespace MyBinaryTree
                         else if (res < 0)
                             parent.Left = node.Left;
                     }
-                        
+
                 }
                 else if (node.Right.Left == null)
                 {
@@ -137,7 +133,7 @@ namespace MyBinaryTree
                         else if (res < 0)
                             parent.Left = node.Right;
                     }
-                        
+
 
                 }
                 else
@@ -195,15 +191,15 @@ namespace MyBinaryTree
         public List<T> PostOrderTraversal()
         {
             List<T> list = new List<T>();
-            return PostOrderTraversal(root,ref list);
+            return PostOrderTraversal(root, ref list);
         }
-        List<T> PostOrderTraversal(BinaryTreeNode<T> root,ref List<T> list)
+        List<T> PostOrderTraversal(BinaryTreeNode<T> root, ref List<T> list)
         {
             if (root == null)
                 throw new Exception("Tree is empty");
 
-            if(root.Left != null)
-                PostOrderTraversal(root.Left,ref list);
+            if (root.Left != null)
+                PostOrderTraversal(root.Left, ref list);
 
             if (root.Right != null)
                 PostOrderTraversal(root.Right, ref list);

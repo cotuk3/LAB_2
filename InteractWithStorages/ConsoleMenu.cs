@@ -173,7 +173,7 @@ namespace InteractWithStorages
                 Console.WriteLine($"{++i}." + myString);
             }
 
-            if(i == -1)
+            if (i == -1)
                 throw new Exception("Storage is Empty!");
 
             Console.WriteLine();
@@ -275,7 +275,6 @@ namespace InteractWithStorages
                 Console.Write("Enter name of storage where you want to find element: ");
                 name = Console.ReadLine().ToLower();
             }
-
             switch (name)
             {
                 case "list":

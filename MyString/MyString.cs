@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 
 namespace My_String
 {
@@ -118,7 +117,7 @@ namespace My_String
 
         public int CompareTo(MyString other)
         {
-            
+
             return comparer.Compare(Value, other.Value);
             //return Value.CompareTo(other.Value);
         }
