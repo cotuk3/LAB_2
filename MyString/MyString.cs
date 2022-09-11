@@ -30,6 +30,7 @@ namespace My_String
             }
         }
 
+        #region Task Methods
         public (bool, char[]) IsSubString(string subString)
         {
             if (subString != null && subString.Length <= Value.Length)
@@ -58,7 +59,7 @@ namespace My_String
                     return (true, res);
             }
             return (false, null);
-        } // +
+        } 
 
         public void InsertSubString(string subString, int index)
         {
@@ -79,7 +80,7 @@ namespace My_String
 
                 Value = new string(res);
             }
-        } // +
+        } 
 
         public void ChangeSubString(string subString, string newSubString)
         {
@@ -109,24 +110,13 @@ namespace My_String
             else
                 throw new ArgumentException($"this string: {Value} does not contain subString: {subString}");
         }
+        #endregion
 
-        public override string ToString()
-        {
-            return Value;
-        }
-
-        public int CompareTo(MyString other)
-        {
-
-            return comparer.Compare(Value, other.Value);
-            //return Value.CompareTo(other.Value);
-        }
-
+        #region Object
         public override int GetHashCode()
         {
             return Value.GetHashCode();
         }
-
         public override bool Equals(object obj)
         {
             if (obj is MyString)
@@ -136,6 +126,12 @@ namespace My_String
             }
             return false;
         }
+        public override string ToString()
+        {
+            string res = $"{Value}({Length})";
+            return res;
+        }
+        #endregion
 
         public int CompareTo(object obj)
         {
@@ -145,6 +141,12 @@ namespace My_String
                 return Value.CompareTo(my);
             }
             return -1;
+        }
+        public int CompareTo(MyString other)
+        {
+
+            return comparer.Compare(Value, other.Value);
+            //return Value.CompareTo(other.Value);
         }
 
         public static implicit operator MyString(string value)
