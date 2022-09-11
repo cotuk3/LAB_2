@@ -199,6 +199,9 @@ namespace MyBinaryTree
         }
         List<T> PostOrderTraversal(BinaryTreeNode<T> root,ref List<T> list)
         {
+            if (root == null)
+                throw new Exception("Tree is empty");
+
             if(root.Left != null)
                 PostOrderTraversal(root.Left,ref list);
 
