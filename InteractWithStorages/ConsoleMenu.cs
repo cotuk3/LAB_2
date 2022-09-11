@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 
 namespace InteractWithStorages
 {
-    public static class ConsoleMenu
+    public static class ConsoleMenu // HACK : add methods to interact with mystring
     {
         static Storages<MyString> my = new Storages<MyString>();
         static Exception wrongName = new Exception("Wrong name of collection");
 
         #region Regexes
-        static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)");
+        static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)$");
+        static Regex regexShowBT = new Regex(@"/show\s+(?<name>[A-Za-z]+)\s+(?<order>[A-Za-z]+)");
         static Regex regexSearch = new Regex(@"/search\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
         static Regex regexAdd = new Regex(@"/add\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
         static Regex regexDelete = new Regex(@"/delete\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
@@ -70,7 +71,7 @@ namespace InteractWithStorages
         static void CheckForLongExpression(string input)
         {
             bool isMatch = regexShow.IsMatch(input) || regexSearch.IsMatch(input)
-                || regexDelete.IsMatch(input) || regexAdd.IsMatch(input);
+                || regexDelete.IsMatch(input) || regexAdd.IsMatch(input) || regexShowBT.IsMatch(input);
 
             if (isMatch)
             {
@@ -78,6 +79,7 @@ namespace InteractWithStorages
                 Match search = regexSearch.Match(input);
                 Match add = regexAdd.Match(input);
                 Match delete = regexDelete.Match(input);
+                Match showBT = regexShowBT.Match(input);
 
                 if (show.Success)
                 {
@@ -97,6 +99,12 @@ namespace InteractWithStorages
                 {
                     DeleteFromStorage(delete.Groups["name"].ToString().ToLower(),
                         delete.Groups["value"].ToString());
+                }
+                else if (showBT.Success)
+                {
+                    string name = showBT.Groups["name"].ToString() + " " + 
+                        showBT.Groups["order"].ToString();
+                    ShowStorage(name);
                 }
             }
             else
@@ -160,6 +168,15 @@ namespace InteractWithStorages
                     break;
                 case "binarytree":
                     Display(my.BinaryTree);
+                    break;
+                case "binarytree postorder":
+                    Display(my.BinaryTree.PostOrderTraversal());
+                    break;
+                case "binarytree preorder":
+                    Display(my.BinaryTree.PreOrderTraversal());
+                    break;
+                case "binarytree inorder":
+                    Display(my.BinaryTree.InOrderTraversal());
                     break;
                 default:
                     throw wrongName;

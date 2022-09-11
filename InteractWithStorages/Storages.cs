@@ -24,13 +24,15 @@ namespace InteractWithStorages
         }
         public void Init()
         {
-            initArray = new MyString[5]
+            initArray = new MyString[]
             {
+            new MyString("ABCDE"),
             new MyString("ABC"),
-            new MyString("A"),
             new MyString("AB"),
             new MyString("ABCD"),
-            new MyString("ABCDF")
+            new MyString("ABCDEFG"),
+            new MyString("ABCDEF"),
+            new MyString("ABCDEFGK")
             };
             array = new T[initArray.Length];
             System.Array.Copy(initArray, array, array.Length);
