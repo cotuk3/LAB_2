@@ -1,14 +1,15 @@
 ﻿using My_String;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace InteractWithStorages
 {
-    public static class ConsoleMenu     {
+    public static class ConsoleMenu
+    {
         static Storages<MyString> my = new Storages<MyString>();
         static Exception wrongName = new Exception("Wrong name of collection");
 
@@ -102,7 +103,7 @@ namespace InteractWithStorages
                 }
                 else if (showBT.Success)
                 {
-                    string name = showBT.Groups["name"].ToString() + " " + 
+                    string name = showBT.Groups["name"].ToString() + " " +
                         showBT.Groups["order"].ToString();
                     ShowStorage(name);
                 }
@@ -326,14 +327,14 @@ namespace InteractWithStorages
                 Console.WriteLine($"{name} contains {value}: {my.ArrayList.Contains(new MyString(value))}");
                 return;
             }
-            else if(value == null)
+            else if (value == null)
             {
                 Console.Write("Enter value of item which you want to find: ");
                 value = Console.ReadLine();
             }
 
             Console.WriteLine($"{name} contains {value}: {stor.Contains<MyString>(new MyString(value))}");
-            
+
         }
         #endregion
 

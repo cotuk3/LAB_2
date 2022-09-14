@@ -59,7 +59,7 @@ namespace My_String
                     return (true, res);
             }
             return (false, null);
-        } 
+        }
 
         public void InsertSubString(string subString, int index)
         {
@@ -80,7 +80,7 @@ namespace My_String
 
                 Value = new string(res);
             }
-        } 
+        }
 
         public void ChangeSubString(string subString, string newSubString)
         {
