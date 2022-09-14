@@ -1,13 +1,14 @@
 ﻿using My_String;
 using System;
+using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace InteractWithStorages
 {
-    public static class ConsoleMenu // HACK : add methods to interact with mystring
-    {
+    public static class ConsoleMenu     {
         static Storages<MyString> my = new Storages<MyString>();
         static Exception wrongName = new Exception("Wrong name of collection");
 
@@ -39,19 +40,18 @@ namespace InteractWithStorages
                 }
 
             } while (input.ToLower() != "/end");
-
         }
         static void Info()
         {
             Console.WriteLine(
             "All commands:\n" +
             " /init - inizialize storages with default values;\n" +
+            " /storages - list of available storages;\n\n" +
             " /add - add new MyString to selected storage;\n" +
-            " /storages - list of available storages;" +
             " /delete - delete selected MyString from selected storage;\n" +
+            " /clear - clears all storages;\n\n" +
             " /show - show selected storage;\n" +
-            " /search - search specific element in selected storage;\n" +
-
+            " /search - search specific element in selected storage;\n\n" +
             " /end - end program.");
         }
         static void Storages()
@@ -134,6 +134,9 @@ namespace InteractWithStorages
                     case "/delete":
                         Storages();
                         DeleteFromStorage();
+                        break;
+                    case "/clear":
+                        Clear();
                         break;
                     case "/cls":
                         Console.Clear();
@@ -280,7 +283,6 @@ namespace InteractWithStorages
             }
 
             return value;
-
         }
         #endregion
 
@@ -298,43 +300,46 @@ namespace InteractWithStorages
                     contains(name, value, my.List);
                     break;
                 case "arraylist":
-                    contains(name, value, my.ArrayList);
+                    contains(name, value, null, my.ArrayList);
                     break;
                 case "array":
                     contains(name, value, my.Array);
                     break;
                 case "binarytree":
-                    contains(name, value);
+                    contains(name, value, my.BinaryTree);
                     break;
                 default:
                     throw wrongName;
             }
         }
-        static void contains(string name, string value, IList stor = null)
+        static void contains(string name, string value, IEnumerable<MyString> stor, ArrayList arr = null)
         {
-
-            if (name == "binarytree" && value == null)
+            if (stor == null && arr == null)
+                throw new Exception("Storage is Empty!");
+            else if (name == "arraylist")
             {
-                Console.Write("Enter value of item which you want to find: ");
-                value = Console.ReadLine();
-            }
-            else if (name == "binarytree" && value != null)
-            {
-                Console.WriteLine($"{name} contains {value}: {my.BinaryTree.Contains(new MyString(value))}");
+                if (value == null)
+                {
+                    Console.Write("Enter value of item which you want to find: ");
+                    value = Console.ReadLine();
+                }
+                Console.WriteLine($"{name} contains {value}: {my.ArrayList.Contains(new MyString(value))}");
                 return;
             }
-
-
-            if (stor == null)
-                throw new Exception("Storage is Empty!");
-            else if (value == null)
+            else if(value == null)
             {
                 Console.Write("Enter value of item which you want to find: ");
                 value = Console.ReadLine();
             }
-            Console.WriteLine($"{name} contains {value}: {stor.Contains(new MyString(value))}");
 
+            Console.WriteLine($"{name} contains {value}: {stor.Contains<MyString>(new MyString(value))}");
+            
         }
         #endregion
+
+        static void Clear()
+        {
+            my = new Storages<MyString>();
+        }
     }
 }
