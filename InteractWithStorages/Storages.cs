@@ -109,7 +109,12 @@ namespace InteractWithStorages
                     if (array[i].Equals(value))
                         break;
                 }
-                System.Array.Copy(array, i + 1, array, i - 1, array.Length - i);
+                System.Array.Copy(array, i + 1, array, i, array.Length - i - 1);
+
+                T[] my = new T[array.Length - 1];
+                System.Array.Copy(array, my, array.Length - 1);
+
+                array = my;
             }
 
 
@@ -117,6 +122,6 @@ namespace InteractWithStorages
         #endregion
 
         public void AddToStorage(dynamic storage, T value) => storage.Add(value);
-        public void DeleteFromStorage(dynamic storage, T value) => storage.Delete(value);
+        public void DeleteFromStorage(dynamic storage, T value) => storage.Remove(value);
     }
 }
