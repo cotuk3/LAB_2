@@ -122,7 +122,7 @@ namespace My_String
             if (obj is MyString)
             {
                 MyString my = (MyString)obj;
-                return Value.Equals(my.Value);
+                return 0 == CompareTo(my);
             }
             return false;
         }
@@ -138,7 +138,7 @@ namespace My_String
             if (obj is MyString)
             {
                 var my = obj as MyString;
-                return Value.CompareTo(my);
+                return CompareTo(my);
             }
             return -1;
         }
