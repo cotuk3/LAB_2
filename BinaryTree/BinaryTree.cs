@@ -74,18 +74,18 @@ namespace MyBinaryTree
             while (node != null)
             {
                 int res = Value.CompareTo(node.Value);
-                if (res > 0)
-                {
-                    parent = node;
-                    node = node.Right;
-                }
-                else if (res < 0)
+                if (res < 0)
                 {
                     parent = node;
                     node = node.Left;
                 }
-                else
+                else if (Value.Equals(node.Value))
                     break;
+                else
+                {
+                    parent = node;
+                    node = node.Right;
+                }
             }
             return (node, parent);
         }
@@ -113,10 +113,11 @@ namespace MyBinaryTree
                     else
                     {
                         int res = node.CompareNode(parent);
-                        if (res > 0)
-                            parent.Right = node.Left;
-                        else if (res < 0)
+                        if (res < 0)
                             parent.Left = node.Left;
+                        else
+                            parent.Right = node.Left;
+
                     }
 
                 }
@@ -129,10 +130,11 @@ namespace MyBinaryTree
                     else
                     {
                         int res = node.CompareNode(parent);
-                        if (res > 0)
-                            parent.Right = node.Right;
-                        else if (res < 0)
+                        
+                        if (res < 0)
                             parent.Left = node.Right;
+                        else
+                            parent.Right = node.Right;
                     }
                 }
                 else
@@ -157,12 +159,10 @@ namespace MyBinaryTree
                     {
                         int res = node.CompareNode(parent);
 
-                        if (res > 0)
-                            parent.Right = mostLeft;
-                        else if (res < 0)
+                        if (res < 0)
                             parent.Left = mostLeft;
-
-
+                        else
+                            parent.Right = node.Right;
                     }
 
                 }

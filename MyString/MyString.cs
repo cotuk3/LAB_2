@@ -120,7 +120,7 @@ namespace My_String
             if (obj is MyString)
             {
                 MyString my = (MyString)obj;
-                return 0 == CompareTo(my);
+                return Value.Equals(my.Value);
             }
             return false;
         }
@@ -133,7 +133,7 @@ namespace My_String
 
         public int CompareTo(MyString other)
         {
-            return Value.CompareTo(other.Value);
+            return Value.Length.CompareTo(other.Value.Length);
         }
 
         public static implicit operator MyString(string value)
