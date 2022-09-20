@@ -4,9 +4,8 @@ using System.Collections;
 namespace My_String
 {
 
-    public class MyString : IComparable<MyString>, IComparable// +
+    public class MyString : IComparable<MyString>// +
     {
-        CaseInsensitiveComparer comparer = new CaseInsensitiveComparer();
         char[] value;
 
         public MyString(string value)
@@ -133,20 +132,9 @@ namespace My_String
         }
         #endregion
 
-        public int CompareTo(object obj)
-        {
-            if (obj is MyString)
-            {
-                var my = obj as MyString;
-                return CompareTo(my);
-            }
-            return -1;
-        }
         public int CompareTo(MyString other)
         {
-
-            return comparer.Compare(Value, other.Value);
-            //return Value.CompareTo(other.Value);
+            return Value.CompareTo(other.Value);
         }
 
         public static implicit operator MyString(string value)
