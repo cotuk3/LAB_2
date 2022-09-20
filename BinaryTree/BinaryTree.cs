@@ -142,7 +142,7 @@ namespace MyBinaryTree
                     BinaryTreeNode<T> mostLeft = node.Right.Left;
                     BinaryTreeNode<T> mostLeftParent = node.Right;
 
-                    while (mostLeft != null)
+                    while (mostLeft.Left != null)
                     {
                         mostLeftParent = mostLeft;
                         mostLeft = mostLeft.Left;
