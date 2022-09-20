@@ -38,7 +38,7 @@ namespace MyBinaryTree
         }
         void add(BinaryTreeNode<T> root, BinaryTreeNode<T> current)
         {
-            
+
             int res = current.CompareNode(root);
             if (res < 0)
             {
@@ -53,7 +53,7 @@ namespace MyBinaryTree
                     add(root.Right, current);
                 else
                     root.Right = current;
-            }           
+            }
         }
 
         public void Clear()
@@ -134,8 +134,6 @@ namespace MyBinaryTree
                         else if (res < 0)
                             parent.Left = node.Right;
                     }
-
-
                 }
                 else
                 {

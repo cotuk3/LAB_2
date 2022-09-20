@@ -1,7 +1,7 @@
 ﻿using My_String;
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -48,18 +48,15 @@ namespace InteractWithStorages
             "All commands:\n" +
             " /init - inizialize storages with default values;\n" +
             " /storages - list of available storages;\n\n" +
+
             " /add - add new MyString to selected storage;\n" +
-<<<<<<< HEAD
             " /delete - delete selected MyString from selected storage;\n" +
             " /clear - clears all storages;\n\n" +
+
             " /show - show selected storage;\n" +
             " /search - search specific element in selected storage;\n\n" +
-=======
-            " /delete - delete selected MyString from selected storage;\n\n" +
-            " /show - show selected storage;\n" +
-            " /search - search specific element in selected storage;\n" +
-            " /clear - clears all storages;\n" +
->>>>>>> test
+
+
             " /end - end program.");
         }
         static void Storages()
@@ -334,23 +331,13 @@ namespace InteractWithStorages
                 Console.WriteLine($"{name} contains {value}: {my.ArrayList.Contains(new MyString(value))}");
                 return;
             }
-<<<<<<< HEAD
             else if (value == null)
-=======
-            else if(value == null)
->>>>>>> test
             {
                 Console.Write("Enter value of item which you want to find: ");
                 value = Console.ReadLine();
             }
-<<<<<<< HEAD
 
             Console.WriteLine($"{name} contains {value}: {stor.Contains<MyString>(new MyString(value))}");
-=======
->>>>>>> test
-
-            Console.WriteLine($"{name} contains {value}: {stor.Contains<MyString>(new MyString(value))}");
-            
         }
         #endregion
 
