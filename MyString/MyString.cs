@@ -90,7 +90,7 @@ namespace My_String
                     index++;
 
 
-                char[] res = new char[Value.Length + subString.Length];
+                char[] res = new char[Value.Length + newSubString.Length];
                 char[] chars = Value.ToCharArray();
 
                 int i = 0;
@@ -102,8 +102,16 @@ namespace My_String
 
                 for (int j = subString.Length + index; j < chars.Length; j++, i++)
                     res[i] = chars[j];
+                index = -1;
+                do
+                {
+                    index++;
+                } while (res[index] != '\0') ;
 
-                Value = new string(res);
+                char[] newRes = new char[index];  
+                    Array.Copy(res, newRes, index);
+
+                Value = new string(newRes);
             }
             else
                 throw new ArgumentException($"this string: {Value} does not contain subString: {subString}");
