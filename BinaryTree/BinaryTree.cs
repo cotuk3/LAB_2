@@ -28,31 +28,34 @@ namespace MyBinaryTree
 
         public void Add(T item)
         {
+            BinaryTreeNode<T> current = new BinaryTreeNode<T>(item);
             if (root == null)
-                root = new BinaryTreeNode<T>(item);
+                root = current;
             else
-                add(root, item);
+                add(root, current);
 
             count++;
         }
-        void add(BinaryTreeNode<T> root, T value)
+        void add(BinaryTreeNode<T> root, BinaryTreeNode<T> current)
         {
-            BinaryTreeNode<T> current = new BinaryTreeNode<T>(value);
+            
             int res = current.CompareNode(root);
             if (res < 0)
             {
                 if (root.Left != null)
-                    add(root.Left, value);
+                    add(root.Left, current);
                 else
                     root.Left = current;
             }
-            else if (res > 0)
+            else
             {
                 if (root.Right != null)
-                    add(root.Right, value);
+                    add(root.Right, current);
                 else
                     root.Right = current;
             }
+            
+
         }
 
         public void Clear()
