@@ -254,5 +254,23 @@ namespace MyBinaryTree
         }
 
         #endregion
+
+        public T this[int index]
+        {
+            get
+            {
+                return PreOrderTraversal()[index];
+            }
+            set
+            {
+                List<T> values = PreOrderTraversal();
+                values[index] = value;
+                Clear();
+                foreach (T a in values)
+                {
+                    Add(a);
+                }
+            }
+        }
     }
 }
