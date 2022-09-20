@@ -53,9 +53,7 @@ namespace MyBinaryTree
                     add(root.Right, current);
                 else
                     root.Right = current;
-            }
-            
-
+            }           
         }
 
         public void Clear()
