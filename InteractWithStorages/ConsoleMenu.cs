@@ -1,6 +1,7 @@
 ﻿using My_String;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -35,8 +36,17 @@ namespace InteractWithStorages
         }
         static void validIndex(int index, dynamic storage)
         {
-            if (index < 0 || index > storage.Length - 1)
-                throw new IndexOutOfRangeException("Index is not valid!");
+            if (storage is Array)
+            {
+                if (index < 0 || index > storage.Length - 1)
+                    throw new IndexOutOfRangeException("Index is not valid!");
+            }
+            else 
+            {
+                if (index < 0 || index > storage.Count - 1)
+                    throw new IndexOutOfRangeException("Index is not valid!");
+            }
+                
         }
         static dynamic returnStorage(string name)
         {
@@ -112,7 +122,7 @@ namespace InteractWithStorages
                 Console.WriteLine();
                 try
                 {
-                    CheckForLongExpression(input);
+                    input = CheckForLongExpression(input);
                 }
                 catch (Exception e)
                 {
@@ -121,7 +131,7 @@ namespace InteractWithStorages
 
             } while (input.ToLower() != "/end");
         }
-        static void CheckForLongExpression(string input)
+        static string CheckForLongExpression(string input)
         {
             bool isMatch = regexShow.IsMatch(input) || regexSearch.IsMatch(input)
                 || regexDelete.IsMatch(input) || regexAdd.IsMatch(input) || regexShowBT.IsMatch(input);
@@ -193,12 +203,12 @@ namespace InteractWithStorages
                         Info();
                         break;
                     case "/interact":
-                        StartInteract();
-                        break;
+                        return StartInteract();
                     default:
                         throw unknownCommand;
                 }
             }
+            return "";
         }
         static void Init()
         {
@@ -335,7 +345,7 @@ namespace InteractWithStorages
                 " /change - changes substring to a new one;\n\n" +
                 " /return - returns to interact with storages.");
         }
-        static void StartInteract()
+        static string StartInteract()
         {
             InteractInfo();
             Storages();
@@ -362,6 +372,8 @@ namespace InteractWithStorages
                             Console.Clear();
                             Info();
                             break;
+                        case "/end":
+                            return "/end";
                         default:
                             throw unknownCommand;
                     }
@@ -371,6 +383,7 @@ namespace InteractWithStorages
                     Console.WriteLine(e.Message);
                 }
             } while (input != "/return");
+            return null;
         }
         static (string name, int index) Interact()
         {
