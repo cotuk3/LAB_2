@@ -58,8 +58,7 @@ namespace My_String
             }
             return (false, null);
         }
-
-        public void InsertSubString(string subString, int index)
+        public MyString InsertSubString(string subString, int index)
         {
             if (index <= Value.Length)
             {
@@ -76,11 +75,11 @@ namespace My_String
                 for (int j = index; j < chars.Length; j++, i++)
                     res[i] = chars[j];
 
-                Value = new string(res);
+                return new string(res);
             }
+            return this;
         }
-
-        public void ChangeSubString(string subString, string newSubString)
+        public MyString ChangeSubString(string subString, string newSubString)
         {
             if (IsSubString(subString).Item1)
             {
@@ -111,7 +110,7 @@ namespace My_String
                 char[] newRes = new char[index];  
                     Array.Copy(res, newRes, index);
 
-                Value = new string(newRes);
+                return new string(newRes);
             }
             else
                 throw new ArgumentException($"this string: {Value} does not contain subString: {subString}");
