@@ -1,7 +1,6 @@
 ﻿using My_String;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -12,7 +11,7 @@ namespace InteractWithStorages
     {
         static Storages<MyString> my = new Storages<MyString>();
 
-        static Exception wrongName = new Exception("Wrong name of collection");
+        static Exception wrongName = new Exception("Wrong name of collection!");
         static Exception unknownCommand = new Exception("Unknown command!");
 
         static void nameIsNull(ref string name)
@@ -22,6 +21,36 @@ namespace InteractWithStorages
                 Console.Write("Enter name of the storage with which you want to interact: ");
                 name = Console.ReadLine();
                 Console.WriteLine();
+            }
+            nameIsValid(name);
+        }
+        static void nameIsValid(string name)
+        {
+            bool isValid = name == "array" || name == "list" || name == "arraylist" || name == "binarytree";
+            bool treeTraversal = name == "binarytree postorder" || name == "binarytree inorder"
+                || name == "binarytree preorder";
+            if (!isValid && !treeTraversal)
+                throw wrongName;
+        }
+        static void validIndex(int index, dynamic storage)
+        {
+            if (index < 0 || index > storage.Length - 1)
+                throw new IndexOutOfRangeException("Index is not valid!");
+        }
+        static dynamic returnStorage(string name)
+        {
+            switch (name.ToLower())
+            {
+                case "list":
+                    return my.List;
+                case "arraylist":
+                    return my.ArrayList;
+                case "array":
+                    return my.Array;
+                case "binarytree":
+                    return my.BinaryTree;
+                default:
+                    throw wrongName;
             }
         }
         static void Clear()
@@ -192,18 +221,6 @@ namespace InteractWithStorages
             nameIsNull(ref name);
             switch (name.ToLower())
             {
-                case "list":
-                    Display(my.List);
-                    break;
-                case "arraylist":
-                    Display(my.ArrayList);
-                    break;
-                case "array":
-                    Display(my.Array);
-                    break;
-                case "binarytree":
-                    Display(my.BinaryTree);
-                    break;
                 case "binarytree postorder":
                     Display(my.BinaryTree.PostOrderTraversal());
                     break;
@@ -214,7 +231,8 @@ namespace InteractWithStorages
                     Display(my.BinaryTree.InOrderTraversal());
                     break;
                 default:
-                    throw wrongName;
+                    Display(returnStorage(name));
+                    break;
             }
         }
         static void Display(IEnumerable storage)
@@ -236,23 +254,10 @@ namespace InteractWithStorages
         static void AddToStorage(string name = null, string value = null)
         {
             nameIsNull(ref name);
-            switch (name)
-            {
-                case "list":
-                    my.AddToStorage(my.List, add(value));
-                    break;
-                case "arraylist":
-                    my.AddToStorage(my.ArrayList, add(value));
-                    break;
-                case "array":
-                    my.AddToArray(add(value));
-                    break;
-                case "binarytree":
-                    my.AddToStorage(my.BinaryTree, add(value));
-                    break;
-                default:
-                    throw wrongName;
-            }
+            if (name == "array")
+                my.AddToArray(add(value));
+            else
+                my.AddToStorage(returnStorage(name), add(value));
             ShowStorage(name);
         }
         static MyString add(string value)
@@ -262,9 +267,7 @@ namespace InteractWithStorages
                 Console.Write("Enter value which you want to add:");
                 value = Console.ReadLine();
             }
-
-            MyString myString = new MyString(value);
-            return myString;
+            return value;
         }
         #endregion 
 
@@ -273,23 +276,12 @@ namespace InteractWithStorages
         {
             nameIsNull(ref name);
             ShowStorage(name);
-            switch (name)
-            {
-                case "list":
-                    my.DeleteFromStorage(my.List, del(value));
-                    break;
-                case "arraylist":
-                    my.DeleteFromStorage(my.ArrayList, del(value));
-                    break;
-                case "array":
-                    my.DeleteFromArray(del(value));
-                    break;
-                case "binarytree":
-                    my.DeleteFromStorage(my.BinaryTree, del(value));
-                    break;
-                default:
-                    throw wrongName;
-            }
+
+            if (name == "array")
+                my.DeleteFromArray(del(value));
+            else
+                my.DeleteFromStorage(returnStorage(name), del(value)); ;
+
             ShowStorage(name);
         }
         static MyString del(string value)
@@ -307,45 +299,25 @@ namespace InteractWithStorages
         static void SearchInStorage(string name = null, string value = null)
         {
             nameIsNull(ref name);
-            switch (name)
-            {
-                case "list":
-                    contains(name, value, my.List);
-                    break;
-                case "arraylist":
-                    contains(name, value, null, my.ArrayList);
-                    break;
-                case "array":
-                    contains(name, value, my.Array);
-                    break;
-                case "binarytree":
-                    contains(name, value, my.BinaryTree);
-                    break;
-                default:
-                    throw wrongName;
-            }
+            contains(name, value, returnStorage(name));
         }
-        static void contains(string name, string value, IEnumerable<MyString> stor, ArrayList arr = null)
+        static void contains(string name, string value, dynamic storage)
         {
-            if (stor == null && arr == null)
+            if (storage == null)
                 throw new Exception("Storage is Empty!");
-            else if (name == "arraylist")
-            {
-                if (value == null)
-                {
-                    Console.Write("Enter value of item which you want to find: ");
-                    value = Console.ReadLine();
-                }
-                Console.WriteLine($"{name} contains {value}: {my.ArrayList.Contains(new MyString(value))}");
-                return;
-            }
             else if (value == null)
             {
                 Console.Write("Enter value of item which you want to find: ");
                 value = Console.ReadLine();
             }
 
-            Console.WriteLine($"{name} contains {value}: {stor.Contains<MyString>(new MyString(value))}");
+            if (name == "array")
+            {
+                Console.WriteLine($"{name} contains {value}: {(storage as MyString[]).Contains(value)}");
+                return;
+            }
+
+            Console.WriteLine($"{name} contains {value}: {storage.Contains(value)}");
         }
         #endregion
 
@@ -364,6 +336,7 @@ namespace InteractWithStorages
         static void StartInteract()
         {
             InteractInfo();
+            Storages();
             string input;
             do
             {
@@ -407,6 +380,7 @@ namespace InteractWithStorages
             Console.Write("\nEnter index of MyString with which you want to interact: ");
             index = int.Parse(Console.ReadLine());
 
+            validIndex(index, returnStorage(name));
             return (name, index);
         }
         static void IsSubString()
