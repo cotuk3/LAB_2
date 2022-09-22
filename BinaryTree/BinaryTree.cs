@@ -175,8 +175,8 @@ namespace MyBinaryTree
         #region IEnumerator<T>
         public IEnumerator<T> GetEnumerator()
         {
-            //return PreOrderTraversal().GetEnumerator();
-            return PostOrderTraversal().GetEnumerator();
+            return PreOrderTraversal().GetEnumerator();
+            //return PostOrderTraversal().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
