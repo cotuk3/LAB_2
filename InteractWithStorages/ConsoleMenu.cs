@@ -14,6 +14,7 @@ namespace InteractWithStorages
         static Exception wrongName = new Exception("Wrong name of collection!");
         static Exception unknownCommand = new Exception("Unknown command!");
 
+        #region Auxiliary Methods
         static void nameIsNull(ref string name)
         {
             if (name == null)
@@ -57,6 +58,7 @@ namespace InteractWithStorages
         {
             my = new Storages<MyString>();
         }
+        #endregion
 
         #region Regexes
         static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)$");
