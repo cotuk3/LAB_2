@@ -9,7 +9,6 @@ namespace InteractWithStorages
 {
     internal class Storages<T> where T : class, IComparable<T>
     {
-        MyString[] initArray;
         T[] array;
         List<T> list;
         ArrayList arrList;
@@ -22,20 +21,9 @@ namespace InteractWithStorages
             arrList = new ArrayList();
             binarytree = new BinaryTree<T>();
         }
-        public void Init()
+        public void Init(T[] initArray)
         {
-            initArray = new MyString[]
-            {
-            new MyString("ABCDE"),
-            new MyString("ABC"),
-            new MyString("AB"),
-            new MyString("ABCD"),
-            new MyString("ABCDEFG"),
-            new MyString("ABCDEF"),
-            new MyString("ABCDEFGK")
-            };
-            array = new T[initArray.Length];
-            System.Array.Copy(initArray, array, array.Length);
+            array = initArray;
             CreateArrayList();
             CreateList();
             CreateBinaryTree();
