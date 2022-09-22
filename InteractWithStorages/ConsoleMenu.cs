@@ -2,12 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Services;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace InteractWithStorages
 {
@@ -18,6 +15,16 @@ namespace InteractWithStorages
         static Exception wrongName = new Exception("Wrong name of collection");
         static Exception unknownCommand = new Exception("Unknown command!");
 
+        static void nameIsNull(ref string name)
+        {
+            if (name == null)
+            {
+                Console.Write("Enter name of the storage with which you want to interact: ");
+                name = Console.ReadLine();
+                Console.WriteLine();
+            }
+        }
+
         #region Regexes
         static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)$");
         static Regex regexShowBT = new Regex(@"/show\s+(?<name>[A-Za-z]+)\s+(?<order>[A-Za-z]+)");
@@ -26,27 +33,7 @@ namespace InteractWithStorages
         static Regex regexDelete = new Regex(@"/delete\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
         #endregion
 
-        #region Start
-        public static void Start()
-        {
-            Info();
-            string input;
-            do
-            {
-                Console.Write("\nEnter the command:");
-                input = Console.ReadLine();
-                Console.WriteLine();
-                try
-                {
-                    CheckForLongExpression(input);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-
-            } while (input.ToLower() != "/end");
-        }
+        #region Info
         static void Info()
         {
             Console.WriteLine(
@@ -68,16 +55,36 @@ namespace InteractWithStorages
         static void Storages()
         {
             PropertyInfo[] propertyInfos = typeof(Storages<MyString>).GetProperties();
-            Console.Write("Storages are available: ");
+            Console.Write("\nStorages are available: ");
             foreach (PropertyInfo property in propertyInfos)
             {
                 Console.Write(property.Name + ", ");
             }
             Console.WriteLine();
         }
-        static void Init()
+        #endregion
+
+        #region Start
+        public static void Start()
         {
-            my.Init();
+            Info();
+            Storages();
+            string input;
+            do
+            {
+                Console.Write("\nEnter the command:");
+                input = Console.ReadLine();
+                Console.WriteLine();
+                try
+                {
+                    CheckForLongExpression(input);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+            } while (input.ToLower() != "/end");
         }
         static void CheckForLongExpression(string input)
         {
@@ -129,21 +136,18 @@ namespace InteractWithStorages
                         Init();
                         break;
                     case "/add":
-                        Storages();
                         AddToStorage();
                         break;
                     case "/storages":
                         Storages();
                         break;
                     case "/show":
-                        Storages();
                         ShowStorage();
                         break;
                     case "/search":
                         SearchInStorage();
                         break;
                     case "/delete":
-                        Storages();
                         DeleteFromStorage();
                         break;
                     case "/clear":
@@ -161,16 +165,27 @@ namespace InteractWithStorages
                 }
             }
         }
+        static void Init()
+        {
+            MyString[] initArray = new MyString[]
+            {
+                new MyString("ABCDE"),
+                new MyString("ABC"),
+                new MyString("AB"),
+                new MyString("ABCD"),
+                new MyString("ABCDEFG"),
+                new MyString("ABCDEF"),
+                new MyString("ABCDEFGK")
+            };
+
+            my.Init(initArray);
+        }
         #endregion
 
         #region Show
         static void ShowStorage(string name = null)
         {
-            if (name == null)
-            {
-                Console.Write("Enter name of the storage you want to get:");
-                name = Console.ReadLine();
-            }
+            nameIsNull(ref name);
             switch (name.ToLower())
             {
                 case "list":
@@ -216,32 +231,25 @@ namespace InteractWithStorages
         #region Add
         static void AddToStorage(string name = null, string value = null)
         {
-            if (name == null)
-            {
-                Console.Write("Enter name of the storage where you want to add MyString:");
-                name = Console.ReadLine();
-            }
+            nameIsNull(ref name);
             switch (name)
             {
                 case "list":
                     my.AddToStorage(my.List, add(value));
-                    Display(my.List);
                     break;
                 case "arraylist":
                     my.AddToStorage(my.ArrayList, add(value));
-                    Display(my.ArrayList);
                     break;
                 case "array":
                     my.AddToArray(add(value));
-                    Display(my.Array);
                     break;
                 case "binarytree":
                     my.AddToStorage(my.BinaryTree, add(value));
-                    Display(my.BinaryTree);
                     break;
                 default:
                     throw wrongName;
             }
+            ShowStorage(name);
         }
         static MyString add(string value)
         {
@@ -254,32 +262,25 @@ namespace InteractWithStorages
             MyString myString = new MyString(value);
             return myString;
         }
-        #endregion
+        #endregion 
 
         #region Delete
         static void DeleteFromStorage(string name = null, string value = null)
         {
-            if (name == null)
-            {
-                Console.Write("Enter name of storage from which you want to delete MyString:");
-                name = Console.ReadLine().ToLower();
-            }
+            nameIsNull(ref name);
+            ShowStorage(name);
             switch (name)
             {
                 case "list":
-                    Display(my.List);
                     my.DeleteFromStorage(my.List, del(value));
                     break;
                 case "arraylist":
-                    Display(my.ArrayList);
                     my.DeleteFromStorage(my.ArrayList, del(value));
                     break;
                 case "array":
-                    Display(my.Array);
                     my.DeleteFromArray(del(value));
                     break;
                 case "binarytree":
-                    Display(my.BinaryTree);
                     my.DeleteFromStorage(my.BinaryTree, del(value));
                     break;
                 default:
@@ -294,7 +295,6 @@ namespace InteractWithStorages
                 Console.Write("Enter value of MyString you want to delete: ");
                 value = Console.ReadLine();
             }
-
             return value;
         }
         #endregion
@@ -302,11 +302,7 @@ namespace InteractWithStorages
         #region Search
         static void SearchInStorage(string name = null, string value = null)
         {
-            if (name == null)
-            {
-                Console.Write("Enter name of storage where you want to find element: ");
-                name = Console.ReadLine().ToLower();
-            }
+            nameIsNull(ref name);
             switch (name)
             {
                 case "list":
@@ -384,29 +380,27 @@ namespace InteractWithStorages
                             Change();
                             break;
                         case "/return":
+                            Console.Clear();
                             Info();
                             break;
                         default:
                             throw unknownCommand;
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
-
-
-            } while (input != "/return");            
+            } while (input != "/return");
         }
         static (string name, int index) Interact()
         {
-            string name;
+            string name = null;
             int index;
-
-            Console.Write("Enter name of the storage you want to get:");
-            name = Console.ReadLine();
+            nameIsNull(ref name);
             ShowStorage(name);
-            Console.Write("\nEnter index of MyString with which you want to interact:");
+
+            Console.Write("\nEnter index of MyString with which you want to interact: ");
             index = int.Parse(Console.ReadLine());
 
             return (name, index);
@@ -414,13 +408,15 @@ namespace InteractWithStorages
         static void IsSubString()
         {
             var interact = Interact();
-            Console.Write("Enter substring:");
+
+            Console.Write("Enter substring: ");
             string substring = Console.ReadLine();
+
             switch (interact.name.ToLower())
             {
                 case "list":
                     Console.WriteLine($"{substring} is substring of {my.List[interact.index]}: " +
-                        $"{my.List[interact.index].IsSubString(substring).Item1}"); 
+                        $"{my.List[interact.index].IsSubString(substring).Item1}");
                     break;
                 case "arraylist":
                     Console.WriteLine($"{substring} is substring of {my.ArrayList[interact.index]}: " +
@@ -437,31 +433,32 @@ namespace InteractWithStorages
                 default:
                     throw wrongName;
             }
-
         }
         static void Insert()
         {
             var interact = Interact();
-            Console.Write("Enter substring you want to insert:");
+
+            Console.Write("Enter substring you want to insert: ");
             string substring = Console.ReadLine();
+
             Console.Write("Enter index where you want to insert your substring: ");
             int index = int.Parse(Console.ReadLine());
             switch (interact.name)
             {
                 case "list":
-                    my.List[interact.index].InsertSubString(substring, index);
+                    my.List[interact.index] = my.List[interact.index].InsertSubString(substring, index);
                     Display(my.List);
                     break;
                 case "arraylist":
-                    (my.ArrayList[interact.index] as MyString).InsertSubString(substring, index);
+                    my.ArrayList[interact.index] = (my.ArrayList[interact.index] as MyString).InsertSubString(substring, index);
                     Display(my.ArrayList);
                     break;
                 case "array":
-                    my.Array[interact.index].InsertSubString(substring, index);
+                    my.Array[interact.index] = my.Array[interact.index].InsertSubString(substring, index);
                     Display(my.Array);
                     break;
                 case "binarytree":
-                    my.BinaryTree[interact.index].InsertSubString(substring, index);
+                    my.BinaryTree[interact.index] = my.BinaryTree[interact.index].InsertSubString(substring, index);
                     Display(my.BinaryTree);
                     break;
                 default:
@@ -473,24 +470,25 @@ namespace InteractWithStorages
             var interact = Interact();
             Console.Write("Enter substring you want to change: ");
             string subString = Console.ReadLine();
+
             Console.Write("Enter new substring: ");
-            string newSubString= Console.ReadLine();
+            string newSubString = Console.ReadLine();
             switch (interact.name)
             {
                 case "list":
-                    my.List[interact.index].ChangeSubString(subString, newSubString);
+                    my.List[interact.index] = my.List[interact.index].ChangeSubString(subString, newSubString);
                     Display(my.List);
                     break;
                 case "arraylist":
-                    (my.ArrayList[interact.index] as MyString).ChangeSubString(subString, newSubString);
+                    my.ArrayList[interact.index] = (my.ArrayList[interact.index] as MyString).ChangeSubString(subString, newSubString);
                     Display(my.ArrayList);
                     break;
                 case "array":
-                    my.Array[interact.index].ChangeSubString(subString, newSubString);
+                    my.Array[interact.index] = my.Array[interact.index].ChangeSubString(subString, newSubString);
                     Display(my.Array);
                     break;
                 case "binarytree":
-                    my.BinaryTree[interact.index].ChangeSubString(subString, newSubString);
+                    my.BinaryTree[interact.index] = my.BinaryTree[interact.index].ChangeSubString(subString, newSubString);
                     Display(my.BinaryTree);
                     break;
                 default:
