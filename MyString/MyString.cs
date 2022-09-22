@@ -105,10 +105,10 @@ namespace My_String
                 do
                 {
                     index++;
-                } while (res[index] != '\0') ;
+                } while (res[index] != '\0');
 
-                char[] newRes = new char[index];  
-                    Array.Copy(res, newRes, index);
+                char[] newRes = new char[index];
+                Array.Copy(res, newRes, index);
 
                 return new string(newRes);
             }

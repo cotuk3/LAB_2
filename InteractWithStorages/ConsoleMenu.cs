@@ -24,6 +24,10 @@ namespace InteractWithStorages
                 Console.WriteLine();
             }
         }
+        static void Clear()
+        {
+            my = new Storages<MyString>();
+        }
 
         #region Regexes
         static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)$");
@@ -496,10 +500,5 @@ namespace InteractWithStorages
             }
         }
         #endregion
-
-        static void Clear()
-        {
-            my = new Storages<MyString>();
-        }
     }
 }

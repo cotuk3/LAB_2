@@ -130,7 +130,7 @@ namespace MyBinaryTree
                     else
                     {
                         int res = node.CompareNode(parent);
-                        
+
                         if (res < 0)
                             parent.Left = node.Right;
                         else
