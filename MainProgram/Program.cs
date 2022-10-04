@@ -1,7 +1,4 @@
 ﻿using InteractWithStorages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MainProgram
 {
@@ -11,5 +8,7 @@ namespace MainProgram
         {
             ConsoleMenu.Start();
         }
+
+
     }
 }

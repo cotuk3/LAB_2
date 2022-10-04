@@ -1,4 +1,5 @@
-﻿using MyBinaryTree;
+﻿using BinaryTree;
+using MyBinaryTree;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace InteractWithStorages
         List<T> list;
         ArrayList arrList;
         BinaryTree<T> binarytree;
+        AVLTree<T> avltree;
 
         public Storages()
         {
@@ -19,6 +21,7 @@ namespace InteractWithStorages
             list = new List<T>();
             arrList = new ArrayList();
             binarytree = new BinaryTree<T>();
+            avltree = new AVLTree<T>();
         }
         public void Init(T[] initArray)
         {
@@ -26,6 +29,7 @@ namespace InteractWithStorages
             CreateArrayList();
             CreateList();
             CreateBinaryTree();
+            CreateAVLTree();
         }
 
         #region List
@@ -53,11 +57,8 @@ namespace InteractWithStorages
         #endregion
 
         #region BinaryTree
-        BinaryTree<T> CreateBinaryTree()
-        {
-            binarytree = new BinaryTree<T>(array);
-            return binarytree;
-        }
+        void CreateBinaryTree() => binarytree = new BinaryTree<T>(array);
+
         public BinaryTree<T> BinaryTree
         {
             get => binarytree;
@@ -107,6 +108,15 @@ namespace InteractWithStorages
 
         }
         #endregion
+
+        #region AVLTree
+        void CreateAVLTree() => avltree = new AVLTree<T>(array);
+        public AVLTree<T> AVLTree
+        {
+            get => avltree;
+        }
+        #endregion
+
 
         public void AddToStorage(dynamic storage, T value) => storage.Add(value);
         public void DeleteFromStorage(dynamic storage, T value) => storage.Remove(value);

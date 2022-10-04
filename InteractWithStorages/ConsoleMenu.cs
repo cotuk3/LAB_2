@@ -28,9 +28,11 @@ namespace InteractWithStorages
         }
         static void nameIsValid(string name)
         {
-            bool isValid = name == "array" || name == "list" || name == "arraylist" || name == "binarytree";
+            bool isValid = name == "array" || name == "list" || name == "arraylist" || name == "binarytree" || name == "avltree"
+                || name == "binarytree tree" || name == "avltree tree";
             bool treeTraversal = name == "binarytree postorder" || name == "binarytree inorder"
-                || name == "binarytree preorder";
+                || name == "binarytree preorder" || name == "avltree postorder" || name == "avltree inorder"
+                || name == "avltree preorder";
             if (!isValid && !treeTraversal)
                 throw wrongName;
         }
@@ -41,12 +43,12 @@ namespace InteractWithStorages
                 if (index < 0 || index > storage.Length - 1)
                     throw new IndexOutOfRangeException("Index is not valid!");
             }
-            else 
+            else
             {
                 if (index < 0 || index > storage.Count - 1)
                     throw new IndexOutOfRangeException("Index is not valid!");
             }
-                
+
         }
         static dynamic returnStorage(string name)
         {
@@ -60,6 +62,12 @@ namespace InteractWithStorages
                     return my.Array;
                 case "binarytree":
                     return my.BinaryTree;
+                case "binarytree inorder":
+                    return my.BinaryTree.InOrderTraversal();
+                case "avltree":
+                    return my.AVLTree;
+                case "avltree inorder":
+                    return my.AVLTree.InOrderTraversal();
                 default:
                     throw wrongName;
             }
@@ -73,7 +81,7 @@ namespace InteractWithStorages
         #region Regexes
         static Regex regexShow = new Regex(@"/show\s+(?<name>[A-Za-z]+)$");
         static Regex regexShowBT = new Regex(@"/show\s+(?<name>[A-Za-z]+)\s+(?<order>[A-Za-z]+)");
-        static Regex regexSearch = new Regex(@"/search\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
+        static Regex regexSearch = new Regex(@"/search\s+(?<name>[A-Za-z]+)\s+(?<value>[A-Z a-z1-9\W+]+)");
         static Regex regexAdd = new Regex(@"/add\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
         static Regex regexDelete = new Regex(@"/delete\s+(?<name>[A-Za-z]+)\s+(?<value>\w+)");
         #endregion
@@ -214,13 +222,13 @@ namespace InteractWithStorages
         {
             MyString[] initArray = new MyString[]
             {
-                new MyString("ABCDE"),
-                new MyString("ABC"),
-                new MyString("AB"),
-                new MyString("ABCD"),
-                new MyString("ABCDEFG"),
-                new MyString("ABCDEF"),
-                new MyString("ABCDEFGK")
+                new MyString("1234567"),
+                new MyString("123456"),
+                new MyString("12345"),
+                new MyString("1234"),
+                new MyString("123"),
+                new MyString("12"),
+                new MyString("1"),
             };
 
             my.Init(initArray);
@@ -233,6 +241,9 @@ namespace InteractWithStorages
             nameIsNull(ref name);
             switch (name.ToLower())
             {
+                case "binarytree":
+                    Display(my.BinaryTree);
+                    break;
                 case "binarytree postorder":
                     Display(my.BinaryTree.PostOrderTraversal());
                     break;
@@ -241,6 +252,25 @@ namespace InteractWithStorages
                     break;
                 case "binarytree inorder":
                     Display(my.BinaryTree.InOrderTraversal());
+                    break;
+                case "binarytree tree":
+                    Print(my.BinaryTree.Root);
+                    break;
+
+                case "avltree":
+                    Display(my.AVLTree);
+                    break;
+                case "avltree tree":
+                    Print(my.AVLTree.Root);
+                    break;
+                case "avltree postorder":
+                    Display(my.AVLTree.PostOrderTraversal());
+                    break;
+                case "avltree preorder":
+                    Display(my.AVLTree.PreOrderTraversal());
+                    break;
+                case "avltree inorder":
+                    Display(my.AVLTree.InOrderTraversal());
                     break;
                 default:
                     Display(returnStorage(name));
@@ -329,7 +359,7 @@ namespace InteractWithStorages
                 return;
             }
 
-            Console.WriteLine($"{name} contains {value}: {storage.Contains(value)}");
+            Console.WriteLine($"{name} contains {value}: {storage.Contains(new MyString(value))}");
         }
         #endregion
 
@@ -383,7 +413,7 @@ namespace InteractWithStorages
                     Console.WriteLine(e.Message);
                 }
             } while (input != "/return");
-            return null;
+            return "";
         }
         static (string name, int index) Interact()
         {
@@ -413,15 +443,19 @@ namespace InteractWithStorages
                     break;
                 case "arraylist":
                     Console.WriteLine($"{substring} is substring of {my.ArrayList[interact.index]}: " +
-                        $"{my.List[interact.index].IsSubString(substring).Item1}");
+                        $"{(my.ArrayList[interact.index] as MyString).IsSubString(substring).Item1}");
                     break;
                 case "array":
                     Console.WriteLine($"{substring} is substring of {my.Array[interact.index]}: " +
-                        $"{my.List[interact.index].IsSubString(substring).Item1}");
+                        $"{my.Array[interact.index].IsSubString(substring).Item1}");
                     break;
                 case "binarytree":
                     Console.WriteLine($"{substring} is substring of {my.BinaryTree[interact.index]}: " +
-                        $"{my.List[interact.index].IsSubString(substring).Item1}");
+                        $"{my.BinaryTree[interact.index].IsSubString(substring).Item1}");
+                    break;
+                case "avltree":
+                    Console.WriteLine($"{substring} is substring of {my.AVLTree[interact.index]}: " +
+                        $"{my.AVLTree[interact.index].IsSubString(substring).Item1}");
                     break;
                 default:
                     throw wrongName;
@@ -440,23 +474,23 @@ namespace InteractWithStorages
             {
                 case "list":
                     my.List[interact.index] = my.List[interact.index].InsertSubString(substring, index);
-                    Display(my.List);
                     break;
                 case "arraylist":
                     my.ArrayList[interact.index] = (my.ArrayList[interact.index] as MyString).InsertSubString(substring, index);
-                    Display(my.ArrayList);
                     break;
                 case "array":
                     my.Array[interact.index] = my.Array[interact.index].InsertSubString(substring, index);
-                    Display(my.Array);
                     break;
                 case "binarytree":
                     my.BinaryTree[interact.index] = my.BinaryTree[interact.index].InsertSubString(substring, index);
-                    Display(my.BinaryTree);
+                    break;
+                case "avltree":
+                    my.AVLTree[interact.index] = my.AVLTree[interact.index].InsertSubString(substring, index);
                     break;
                 default:
                     throw wrongName;
             }
+            Display(returnStorage(interact.name));
         }
         static void Change()
         {
@@ -470,23 +504,107 @@ namespace InteractWithStorages
             {
                 case "list":
                     my.List[interact.index] = my.List[interact.index].ChangeSubString(subString, newSubString);
-                    Display(my.List);
                     break;
                 case "arraylist":
                     my.ArrayList[interact.index] = (my.ArrayList[interact.index] as MyString).ChangeSubString(subString, newSubString);
-                    Display(my.ArrayList);
                     break;
                 case "array":
                     my.Array[interact.index] = my.Array[interact.index].ChangeSubString(subString, newSubString);
-                    Display(my.Array);
                     break;
                 case "binarytree":
                     my.BinaryTree[interact.index] = my.BinaryTree[interact.index].ChangeSubString(subString, newSubString);
-                    Display(my.BinaryTree);
+                    break;
+                case "avltree":
+                    my.AVLTree[interact.index] = my.AVLTree[interact.index].ChangeSubString(subString, newSubString);
                     break;
                 default:
                     throw wrongName;
             }
+            Display(returnStorage(interact.name));
+        }
+        #endregion
+
+
+        #region Show Tree
+        class NodeInfo
+        {
+            public dynamic Node;
+            public string Text;
+            public int StartPos;
+            public int Size { get { return Text.Length; } }
+            public int EndPos { get { return StartPos + Size; } set { StartPos = value - Size; } }
+            public NodeInfo Parent, Left, Right;
+        }
+        static void Print(dynamic root, string textFormat = "0", int spacing = 1, int topMargin = 2, int leftMargin = 2)
+        {
+            if (root == null) return;
+            int rootTop = Console.CursorTop + topMargin;
+            var last = new List<NodeInfo>();
+            var next = root;
+            for (int level = 0; next != null; level++)
+            {
+                var item = new NodeInfo { Node = next, Text = next.Value.ToString() };
+                if (level < last.Count)
+                {
+                    item.StartPos = last[level].EndPos + spacing;
+                    last[level] = item;
+                }
+                else
+                {
+                    item.StartPos = leftMargin;
+                    last.Add(item);
+                }
+                if (level > 0)
+                {
+                    item.Parent = last[level - 1];
+                    if (next == item.Parent.Node.Left)
+                    {
+                        item.Parent.Left = item;
+                        item.EndPos = Math.Max(item.EndPos, item.Parent.StartPos - 1);
+                    }
+                    else
+                    {
+                        item.Parent.Right = item;
+                        item.StartPos = Math.Max(item.StartPos, item.Parent.EndPos + 1);
+                    }
+                }
+                next = next.Left ?? next.Right;
+                for (; next == null; item = item.Parent)
+                {
+                    int top = rootTop + 2 * level;
+                    Print(item.Text, top, item.StartPos);
+                    if (item.Left != null)
+                    {
+                        Print("/", top + 1, item.Left.EndPos);
+                        Print("_", top, item.Left.EndPos + 1, item.StartPos);
+                    }
+                    if (item.Right != null)
+                    {
+                        Print("_", top, item.EndPos, item.Right.StartPos - 1);
+                        Print("\\", top + 1, item.Right.StartPos - 1);
+                    }
+                    if (--level < 0) break;
+                    if (item == item.Parent.Left)
+                    {
+                        item.Parent.StartPos = item.EndPos + 1;
+                        next = item.Parent.Node.Right;
+                    }
+                    else
+                    {
+                        if (item.Parent.Left == null)
+                            item.Parent.EndPos = item.StartPos - 1;
+                        else
+                            item.Parent.StartPos += (item.StartPos - 1 - item.Parent.EndPos) / 2;
+                    }
+                }
+            }
+            Console.SetCursorPosition(0, rootTop + 2 * last.Count - 1);
+        }
+        static void Print(string s, int top, int left, int right = -1)
+        {
+            Console.SetCursorPosition(left, top);
+            if (right < 0) right = left + s.Length;
+            while (Console.CursorLeft < right) Console.Write(s);
         }
         #endregion
     }
