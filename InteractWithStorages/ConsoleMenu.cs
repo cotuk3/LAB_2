@@ -222,13 +222,13 @@ namespace InteractWithStorages
         {
             MyString[] initArray = new MyString[]
             {
-                new MyString("1234567"),
-                new MyString("123456"),
-                new MyString("12345"),
-                new MyString("1234"),
-                new MyString("123"),
-                new MyString("12"),
-                new MyString("1"),
+                "1",
+                "12",
+                "123",
+                "1234",
+                "12345",
+                "123456",
+                "1234567"
             };
 
             my.Init(initArray);

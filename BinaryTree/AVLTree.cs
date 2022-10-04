@@ -129,18 +129,20 @@ namespace MyTrees
             {
                 if (this.State == Weight.RightHeavily)
                 {
-                    if (this.BalanceFactor() < 1)
+                    if (this.Right.BalanceFactor() < 1)
                         this.RightLeftRotate();
                     else
                         LeftRotate();
                 }
                 else if (this.State == Weight.LeftHeavily)
                 {
-                    if (this.BalanceFactor() > 1)
+                    if (this.Left.BalanceFactor() > 0)
                         this.LeftRightRotate();
                     else
                         this.RightRotate();
                 }
+                else
+                    return;
                 tree.root.MaxChildHeight(tree.root);
 
                 calculateheight(tree.root);
