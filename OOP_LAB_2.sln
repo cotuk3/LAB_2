@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProgram", "MainProgram\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyString", "MyString\MyString.csproj", "{E94231DD-0501-4272-AB8B-C11AA24E7B0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryTree", "BinaryTree\BinaryTree.csproj", "{1B084334-B1C9-4B02-B845-6D2F94D59BE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trees", "BinaryTree\Trees.csproj", "{1B084334-B1C9-4B02-B845-6D2F94D59BE3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractWithStorages", "InteractWithStorages\InteractWithStorages.csproj", "{DF465369-C891-4FAB-9B50-8E1A4E5FD34F}"
 EndProject

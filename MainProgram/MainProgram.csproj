@@ -50,9 +50,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BinaryTree\BinaryTree.csproj">
+    <ProjectReference Include="..\BinaryTree\Trees.csproj">
       <Project>{1b084334-b1c9-4b02-b845-6d2f94d59be3}</Project>
-      <Name>BinaryTree</Name>
+      <Name>Trees</Name>
     </ProjectReference>
     <ProjectReference Include="..\InteractWithStorages\InteractWithStorages.csproj">
       <Project>{df465369-c891-4fab-9b50-8e1a4e5fd34f}</Project>

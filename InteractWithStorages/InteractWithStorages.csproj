@@ -46,9 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BinaryTree\BinaryTree.csproj">
+    <ProjectReference Include="..\BinaryTree\Trees.csproj">
       <Project>{1b084334-b1c9-4b02-b845-6d2f94d59be3}</Project>
-      <Name>BinaryTree</Name>
+      <Name>Trees</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyString\MyString.csproj">
       <Project>{e94231dd-0501-4272-ab8b-c11aa24e7b0d}</Project>
