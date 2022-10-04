@@ -4,11 +4,15 @@ using System.Collections.Generic;
 
 namespace MyBinaryTree
 {
-    public class BinaryTree<T> : IEnumerable<T>, ICollection<T> where T : class, IComparable<T>
+    public class BinaryTree<T> : IEnumerable<T>, ICollection<T> where T : IComparable<T>
     {
         BinaryTreeNode<T> root;
         int count;
 
+        public BinaryTreeNode<T> Root
+        {
+            get => root;
+        }
         public BinaryTree()
         {
             root = null;
@@ -38,7 +42,6 @@ namespace MyBinaryTree
         }
         void add(BinaryTreeNode<T> root, BinaryTreeNode<T> current)
         {
-
             int res = current.CompareNode(root);
             if (res < 0)
             {
@@ -172,10 +175,10 @@ namespace MyBinaryTree
         }
         #endregion
 
-        #region IEnumerator<T>
+        #region IEnumerable<T>
         public IEnumerator<T> GetEnumerator()
         {
-            return PreOrderTraversal().GetEnumerator();
+            return InOrderTraversal().GetEnumerator();
             //return PostOrderTraversal().GetEnumerator();
         }
 
@@ -259,13 +262,14 @@ namespace MyBinaryTree
         {
             get
             {
-                return PreOrderTraversal()[index];
+                return InOrderTraversal()[index];
             }
             set
             {
-                List<T> values = PreOrderTraversal();
+                List<T> values = InOrderTraversal();
                 values[index] = value;
                 Clear();
+                values.Sort();
                 foreach (T a in values)
                 {
                     Add(a);

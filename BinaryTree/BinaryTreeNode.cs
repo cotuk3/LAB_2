@@ -2,7 +2,7 @@
 
 namespace MyBinaryTree
 {
-    public class BinaryTreeNode<TNode> : IComparable<TNode> where TNode : class, IComparable<TNode>
+    public class BinaryTreeNode<TNode> : IComparable<TNode> where TNode : IComparable<TNode>
     {
         public BinaryTreeNode(TNode value)
         {
