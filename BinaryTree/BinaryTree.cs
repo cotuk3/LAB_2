@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MyBinaryTree
+namespace MyTrees
 {
     public class BinaryTree<T> : IEnumerable<T>, ICollection<T> where T : IComparable<T>
     {

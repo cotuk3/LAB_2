@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyBinaryTree
+namespace MyTrees
 {
     public class BinaryTreeNode<TNode> : IComparable<TNode> where TNode : IComparable<TNode>
     {

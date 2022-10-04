@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace BinaryTree
+namespace MyTrees
 {
     public class AVLTree<T> : IEnumerable<T>, ICollection<T> where T : IComparable<T> // TODO : finish testing and commit changes + merge 
     {
