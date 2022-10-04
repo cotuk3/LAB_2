@@ -129,7 +129,7 @@ namespace MyTrees
             {
                 if (this.State == Weight.RightHeavily)
                 {
-                    if (this.Right.BalanceFactor() < 1)
+                    if (this.Right.BalanceFactor() < 0)
                         this.RightLeftRotate();
                     else
                         LeftRotate();
